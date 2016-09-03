@@ -27,3 +27,46 @@
 //also supports a simple import or export to text file
 //also, the function prototype for automatically getting the time is added...
 //now, lets move into the next revision
+
+
+//August 3, 2016
+//Rev1.1
+
+//for now, let us assume that we only have a one big vector of data... stored chronollogically
+
+//first addition is to add the data/time info on the entries, as well as categories?
+	//best way to handle the Day, Month, Year, Dayweek, week?, time?
+	//in the text file, it is best to let it be a single string? 08/03/2016 \t Wednesday \t 21:14:00
+	//how about in the struct? -> important here is the date because i want to use them to find data... 
+		//idea is to put in a data from/to, and return all values
+		//hmm.. should i create my own time class? -> better convert it to days from 1900...
+		//or just use the normal standard...
+		//also, if in the future we would like to add functionality such as return by day, dayweek, week, month, then better have their own fields, can use enum for those...
+//for now, let us put a default 
+
+//so action item is to first type define a specific time structure to be used for expense vector 
+
+
+//ExpVector now has its own time member, though it is still in raw format
+//next do a nice print function that wull show everythin
+//then do a nice print file function that is both nice to shpw, while preserving all information..
+	//here maybe we can overwrite the << operator of the time struct,... but no, it is not worth it!! just do a manual print function, use a weekday decode function
+	//export vector function also done!
+//next step, a vector load function? then some search algos?
+	//for loading from spread sheet, we need to create a new add entry and new Expenditure constructor that will have the time as another input arguments
+	//currently, loadvectro_Tmp simply reads each entry in the csv into a string array, each string is then passed as the argument to add entry
+	//this in turn allow add entry to forward the string inputs to a new expenditure constructor
+	//now in the new expenditure function, a new function named stringtotimedate is used to extract 8/5/2016 and 23:54:23 into their own respecitve Exptime structures
+	
+//NOTE this is the next current workint verion 1.1... though note that there are still a couple of things needed to clean up
+	//the include of header files is a bit messy - ok
+	//the constructor of Expenditure is in .cpp instead of a .h -ok
+	//copy load vector temp to load vector and delete the temp class and functions. -ok
+	//the last is the tmp variable names, which ideally should be function_tmp_type
+	//committing this initial working revision
+	
+	
+	
+	
+
+
