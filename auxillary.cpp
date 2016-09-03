@@ -13,8 +13,7 @@ struct tm *g_now;
 void timestring_now(){
 	g_t = time(0);   // get time now
     g_now = localtime( & g_t );    
-    //note here, members of the time structure is in int, to convert this to string
-    strftime(g_time_buf,30,"%x\t%A\t%X",g_now);
+    strftime(g_time_buf,30,"%x\t%A\t%X",g_now);   //note here, members of the time structure is in int, to convert this to string
     //cout << g_now->tm_wday;
 }
 
@@ -32,18 +31,19 @@ const string ExpTime::stringWkday() const{
 	}
 }
 
+
 ExpTime tmtoExptime(){
 	ExpTime tmp;
 	tmp.day = static_cast<timedate_t>(g_now->tm_mday);
 	tmp.month = static_cast<timedate_t>(g_now->tm_mon+1);
 	tmp.year = static_cast<timedate_t>(g_now->tm_year+1900);
 	tmp.wkday = static_cast<timedate_t>(g_now->tm_wday);
-	tmp.yday = static_cast<timedate_t>(g_now->tm_yday); 
     tmp.hour = static_cast<timedate_t>(g_now->tm_hour);
 	tmp.min = static_cast<timedate_t>(g_now->tm_min);
 	tmp.sec = static_cast<timedate_t>(g_now->tm_sec);	
 	return tmp;
 }
+
 
 //for the input, use references to avoid making an extra copy, except for spos, since we will use npos as its input argument
 //note that this function will also update npos, which is the last delimiter position

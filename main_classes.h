@@ -2,6 +2,7 @@
 #include <string>
 #include <vector>
 #include <ctime>
+#include <algorithm>
 
 #ifndef __AUXILLARY
 #include "auxillary.h"
@@ -22,7 +23,7 @@ using namespace std;
 //now, make the member of this public, since this is only a basic building block, higher level classes are private anyway..
 /////////////////////////////////////////////////////////////////////////////////////////////
 
-
+//note to change this in the future, as the float/double accuracy sometimes losses a decimal place, which is very vital in money...
 class PhPeso{
 public:
 	string currency;
@@ -47,11 +48,13 @@ private:
     ExpTime etime;
 public:
     Expenditure(const string curr, const float val, const string dc);  //constructor for real time user input
-	Expenditure(const string date, const string time, const int wday, const int yday, const string curr, const float val, const string dc); //constructor variation, used for loading from csv file
+	Expenditure(const string date, const string time, const int wday, const string curr, const float val, const string dc); //constructor variation, used for loading from csv file
     const PhPeso getPrice() const {return price;}
     const string getDesc() const {return description;}
     const ExpTime getTime() const {return etime;}
     void printExpenditure();
+    const bool operator<(const Expenditure &o) const {return etime < o.etime; } //compare expenditure through its date
+    const bool operator<=(const Expenditure &o) const {return etime <= o.etime;} 
 };
 
 
@@ -61,16 +64,18 @@ class ExpVector{
 public:
     ExpVector(){} //confirmed that this will use a default constructor for the vector, an empty one...
     void addEntry(const string curr, const float, const string dc); 
-    void addEntry(const string date, const string time, const int wday, const int yday,const string curr, const float, const string dc);
-    
+    void addEntry(const string date, const string time, const int wday, const string curr, const float, const string dc);
+    //i think the second addentry function must be a private/protected function!
 	//void dropEntry(){ vecexp.pop_back(); }                         //push back interface
     PhPeso addTot();
     
 	void printSize(){ cout << vecexp.size() << endl; }
     void printVctr();    
+    void printVctrRange(const string &startdate, const string &enddate); //note here, can't make this const function due to iterator
     
     void exportVctr(); //export current content of a vector to a csv file 
     void loadVctr();
+    
 };
     
 
