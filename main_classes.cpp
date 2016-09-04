@@ -93,7 +93,7 @@ void ExpVector::printVctr(){
 
 
 void ExpVector::exportVctr(){
-	ofstream f_dest("dest-file.csv");
+	ofstream f_dest("source-file.csv");
 	for(int i=0; i<vecexp.size(); ++i){
 		PhPeso exprtvctr_money_tmp = vecexp[i].getPrice();	
 		ExpTime exprtvctr_time_tmp = vecexp[i].getTime();
@@ -116,7 +116,6 @@ void ExpVector::loadVctr(){
  		getline(f_source,tmp_str[5],'\n');
 		tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //resolve bug of getline that also stores an extra character \n
  		addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
-		
 		//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
 	 }
 	f_source.close();

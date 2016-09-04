@@ -1,5 +1,8 @@
-//say we create the UI here on main
-//initialization function
+//////////////////////
+///in this UI, all entries are loaded and stored from a single csv file, source-file.csv
+/////////////////////	
+
+
 ExpVector Ev1;
 Ev1.loadVctr();
 
@@ -9,7 +12,6 @@ int mode;
 string currency, description;
 float value;
 
-Ev1.addEntry("Php",1.00,"kendi");
 
 cout << "**************************" << endl;
 cout << "**Welcome to my program***" << endl;
@@ -22,7 +24,6 @@ int inf_loop=0, command=0, subcommand=0;
 //enter the main UI loop, make this an infinite loop
 while(inf_loop==0){
 	
-	
 	cout << "Press the number enclosed by <> to choose your command" << endl;
 	cout << "<0>: Exit the program" << endl;
 	cout << "<1>: View current list of expense" << endl;
@@ -31,7 +32,6 @@ while(inf_loop==0){
 	cin >> command;
 	
 	if(command==1){
-	
 		
 		cout << endl << endl << endl;
 		cout << "enter the start date here =>"; cin >> start_date; cout << endl;
@@ -47,25 +47,25 @@ while(inf_loop==0){
 	}
 	
 	else if(command==2){
+		
 		int buffer_temp;
 		cout << endl << endl << endl;
 		cout << "enter the data for your new expense" << endl;
 		cout << "please enter the currency =>"; cin >> currency; cout << endl;
 		cout << "please enter the value of the expense =>"; cin >> value; cout << endl;
-		cout << "please enter the description of the expense =>"; //cin >> description; cout << endl;
+		cout << "please enter the description of the expense =>"; 
+		cin.ignore(); getline(cin,description); cout << endl;   
+		//get line needed as cin will stop buffering on a space
+		//cin.ignore needed, as the enter key from previous cin will be stored in the cin buffer
 		
-		
-		//stringstream 
-		//cout << description;
-		
-		//cout << currency << value << description;
-		//Ev1.addEntry(currency,value,description); //-> some problem when the description has white spaces
-													//found the error, can't simply take an entire string using cin >>, stops at the white space...
-		
-		//cout << "enter any key to continue\n";
-		//cin >>	buffer_temp;  //some bug, forcing the program to exit after add entry.
+		cout << currency << value << description;
+		Ev1.addEntry(currency,value,description); 	
 		
 	}
 	
-	else break;
-}
+	else{
+		Ev1.exportVctr();
+		break; 
+	}
+}	
+

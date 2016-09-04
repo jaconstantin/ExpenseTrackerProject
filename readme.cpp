@@ -260,9 +260,37 @@
 //this time, I would like to create the console UI
 	//well a simple UI using main is not working - need a way to hanle an input of string.... as it seems that cin >> only takes up to the white space
 	//actually, just need to google of a way to stream in a string with spaces, as Cin does not seem to be enough = review the char* argc, argc crap...
+	
+	
+////////////////////
+//start of branched, continuing rev 1.5, fixing UI, call this Rev 1.51	
+////////////////////
+//now, add entry is working done by using getline, instead of cin to have a user input of an entire sentence
+//note the use of cin.ignore(), useful in cases wherein \n character is being unwillingly buffered...
+//added function that upon exit, the current list is pushed back to the source-csv file
+//big note here - this is the sole modification to main_classes.cpp wherein export vector is changed to export from dest-file to source-file
+//now pushing the user interface back to userinterface.h
 
-		
-		
+//list of things that can be improved in the UI
+//1. error checking for inputs - try exceptions here?
+//2. appearance... need more print lines to have a pretty nice text data presentation
+//3. probably add an easier print data, wherein give the user the option to simply print all, instead of printing a range
+
+//commit first as Rev 1.51
+//////////////////////////////
+
+
+/////////////////////////////////////
+//Further notes for future work
+////////////////////////////////////
+
+//important change logs for merging with inheritance rev2 branched
+//change1. is the added fix for loadvector function to be compatible with cygwin
+//change2 is to have load and store vector to the same source.csv
+//change3, ensure that UI code is in a separate header file
+
+
+
 //though, want to do something to ensure that we don't compare time on the level of expeniture...
 //furutre things to do: use Enum to define the mode, 0,1,2 - day, month, year
 	//lastly, it seems that expenditure memebers are better off public - useless data encapsulation, as we are gettinge each of the members anyway
