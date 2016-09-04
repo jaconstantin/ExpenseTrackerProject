@@ -52,7 +52,7 @@ timedate_t ExpTime::timedayWkday(const string &wday){
 	else if(wday=="Wednesday") return 3;
 	else if(wday=="Thursday")  return 4;
 	else if(wday=="Friday") return 5;
-	else if("Saturday")  return 6;
+	else if(wday=="Saturday")  return 6;
 	else return 7;
 }
 

@@ -114,13 +114,16 @@ void ExpVector::loadVctr(){
  	while(f_source.good()){
  		for(int x=0; x<5; ++x) getline(f_source,tmp_str[x],',');
  		getline(f_source,tmp_str[5],'\n');
-		tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //resolve bug of getline that also stores an extra character \n
- 		addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
+		
+		//tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist
+ 		
+		addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
 		//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
-	 }
+	}
 	f_source.close();
 	vecexp.pop_back(); //this function copies the null character as the last element, hence remove this
 	
+
 }
 
 void ExpVector::printVctrRange(const string &startdate, const string &enddate, int &mode){

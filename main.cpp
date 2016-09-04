@@ -64,41 +64,44 @@ while(inf_loop==0){
 	
 	cin >> command;
 	
-	if(command==1){
+	switch(command){
 		
-		cout << endl << endl << endl;
-		cout << "enter the start date here =>"; cin >> start_date; cout << endl;
-		cout << "enter the end date here =>"; cin >> end_date; cout << endl << endl;
+		case 1:
+			cout << endl << endl << endl;
+			cout << "enter the start date here =>"; cin >> start_date; cout << endl;
+			cout << "enter the end date here =>"; cin >> end_date; cout << endl << endl;
+			
+			cout << "Press the number enclosed by <> to choose your command" << endl;
+			cout << "<0>: Summarize expense per day" << endl;
+			cout << "<1>: Summarize expense per month" << endl;
+			cout << "<2>: Summarize expense per year" << endl;
+			cout << "<3>: Summarize expense per entry" << endl;
+			cin >> mode;
+			Ev1.printVctrRange(start_date,end_date,mode);
+			break;
+			
+		case 2:
+			int buffer_temp;
+			cout << endl << endl << endl;
+			cout << "enter the data for your new expense" << endl;
+			cout << "please enter the currency =>"; cin >> currency; cout << endl;
+			cout << "please enter the value of the expense =>"; cin >> value; cout << endl;
+			cout << "please enter the description of the expense =>"; 
+			cin.ignore(); getline(cin,description); cout << endl;   
+			//get line needed as cin will stop buffering on a space
+			//cin.ignore needed, as the enter key from previous cin will be stored in the cin buffer
+			
+			cout << currency << value << description;
+			Ev1.addEntry(currency,value,description); 	
+			break;
 		
-		cout << "Press the number enclosed by <> to choose your command" << endl;
-		cout << "<0>: Summarize expense per day" << endl;
-		cout << "<1>: Summarize expense per month" << endl;
-		cout << "<2>: Summarize expense per year" << endl;
-		cout << "<3>: Summarize expense per entry" << endl;
-		cin >> mode;
-		Ev1.printVctrRange(start_date,end_date,mode);
+		default:
+			break; 
 	}
 	
-	else if(command==2){
-		
-		int buffer_temp;
-		cout << endl << endl << endl;
-		cout << "enter the data for your new expense" << endl;
-		cout << "please enter the currency =>"; cin >> currency; cout << endl;
-		cout << "please enter the value of the expense =>"; cin >> value; cout << endl;
-		cout << "please enter the description of the expense =>"; 
-		cin.ignore(); getline(cin,description); cout << endl;   
-		//get line needed as cin will stop buffering on a space
-		//cin.ignore needed, as the enter key from previous cin will be stored in the cin buffer
-		
-		cout << currency << value << description;
-		Ev1.addEntry(currency,value,description); 	
-		
-	}
-	
-	else{
+	if(command==0){
 		Ev1.exportVctr();
-		break; 
+		break;
 	}
 }	
 

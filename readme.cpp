@@ -275,9 +275,20 @@
 //1. error checking for inputs - try exceptions here?
 //2. appearance... need more print lines to have a pretty nice text data presentation
 //3. probably add an easier print data, wherein give the user the option to simply print all, instead of printing a range
+//4. compile all tests, and perform valgrind to ensure memory leakage
 
 //commit first as Rev 1.51
 //////////////////////////////
+
+//change 1, use of switch statement in the UI
+//noticed a new bug, upon export or load vector repeatdely, some of the characters get lost...
+	//okay, the text when written as csv from an excel editor, will have additional characters, requiring the load vector fix
+	//however, in program additions won't have this extra character so it does not need the fix. -> actually reduces the character
+	//hence, need a source file that, post processed once with the load vector fix, then remove that extra line in load vector
+	//remaining bug, the day changes for the last entry - solved, some syntax error in the saturday portion of determining wkday
+////////////////////////////
+////commit as rev 1.512
+///////////////////////////	
 
 
 /////////////////////////////////////
@@ -288,6 +299,7 @@
 //change1. is the added fix for loadvector function to be compatible with cygwin
 //change2 is to have load and store vector to the same source.csv
 //change3, ensure that UI code is in a separate header file
+//change4, corrected a syntax error bug in auxillary.cpp, timedaywkday function -> saturday condition was wrong
 
 
 
