@@ -17,6 +17,8 @@
     //furthermore, it is located in contiguous mem locations so ideally faster travesing/iterating all thru=ough out
     //perfect if we only need to insert at the end, as inserting a the middle will definetly need reallocation or reassignment
     
+    //aslo want to add here, the beauty of vector, wherein its contents are stored on the heap - taken care of by the class, yey!
+    
 //so for practice purposes, i try to create a linked list as an object container for fun
 //i also made LnkExp class as a friend class to the smaller object units for simplicity..
 
@@ -189,4 +191,80 @@
 ///////////////////////
 ///end sidenote///////
 ////////////////////////
+
+
+//////////////////////////////
+//Moving on to Rev 1.3?
+/////////////////////////////
+//target functionality, is to have ability to summarize the expense per day, or per month
+//have greatly though about this, but it seems that this can be done by extending the current iteration used by print range...
+	//in the though process, one can think of having a pointer map, already containing the total per day and per month. as a result, we would not need to iterate per entry but at the cost of more storage
+//for this rev, let us just extend the iteration process, see how to efficiently create the function structure...
+
+//to summarize per day
+	//again find the start iterator as is in print range...
+	//per each element, accumulate the sum per day, and simply print, once the date had changed.
+	
+//1.added expenditure member function printDate
+//2. now, printrangeday function is done - improved some of the parts from print by entry...
+
+//printrangemonth can be done in a very similar function. the question is, can we combine this to have a single printrange function?
+
+
+
+///////////////
+//Rev 1.4
+/////////////
+//this rev requires a lot of work. Target is to have a single function for printvctr range, with the option to print by entry, by day, month, or year
+//two ways of doing this
+	//1. implement an exp time compare function, with argument to choose to compare by day, month, year etc...
+		//let us start to do this
+	//2. two, is to create multiple exptime subclasses, each with own overload for the operator< - not sure if this is a smart way to do inheritance...
+		//this will need an interface to copy the time values from different subclasses, which i believe is not doable..
+
+//first step, is making exptime a class
+//1. modified exp time to be a class, now making constructors for it
+//2. also creating prtinexptime function, now width formatting function
+//3. now starting to reflect the exptime changes to the expenditure class, however need to determine something first
+	//if i have a constructor PhPeso(int x=0, int y=0):x(a),b(a) -> will this be valid for the default constructor? PhPeso x1; - well yes, but i need to specify all?
+	//so right now. it is really understandable why expenditure will not use a default constructor, because not all members are initiailized by ths construcotr
+	//Expenditure::Expenditure(const string curr="Php", const float val=0, const string dc="none"):price(curr,val),description(dc){
+	
+	//now at export vector ->want to implement a new interface for ExpTime -> getTime, getDate, stringWkday that returns the neeed info as string. 
+	//this way, the ExpTime class is now fully abstracted/encapsulated, as the user can use this class without knowing the timedate structure thingy...
+	//printExpTime also changed to just use the new built in functions gettime and getDate.
+	//export vector now looking good...
+	
+	//now on to store vector, again, new interface functions are needed, this time... by using a setter
+	//currently fixing the new constructor of exp time, wherin the argumetns are string date, time, and wkday.. having problem with converting wkday to int...
+	//now, changes are reflected on the new constructor for expenditure, note that i put default values here, so that it can also serve as the default constrcutor
+	//also done with simple changes, loadvector now also working..!!
+	
+	//now working on print range day - also working, done!!
+//now pause here, want to re-implement this function, to accomodate various comparison of time...
+	//first and foremost, the operator< overload is mandatory for both ExpTime and Expenditure, as it is the needed criteria for the lower_bound function - in expenditure domain
+	//besides that, we can fully operate on exptime only.. so let us make a function that will compare exptime in units of time, day, month, and year - done
+	//now let us leave printrange, instead let us play with printrangeday
+		//printrangeday now also working, did some mods on how ExpTime getDate is implemented, again implement the mode
+		//however, some problem with printDate
+		//finally done, Rev1.4!!
+
+
+///////////////////////
+///next Rev, 1.5
+//////////////////////
+//need to add another mode to printrangeday -> per entry, then replace/redefine definition of printrange
+	//done by introducing mode 3, which will print per entry
+	
+//need to add total at the end of each summary = also done!
+//this time, I would like to create the console UI
+	//well a simple UI using main is not working - need a way to hanle an input of string.... as it seems that cin >> only takes up to the white space
+	//actually, just need to google of a way to stream in a string with spaces, as Cin does not seem to be enough = review the char* argc, argc crap...
+
+		
+		
+//though, want to do something to ensure that we don't compare time on the level of expeniture...
+//furutre things to do: use Enum to define the mode, 0,1,2 - day, month, year
+	//lastly, it seems that expenditure memebers are better off public - useless data encapsulation, as we are gettinge each of the members anyway
+	//furthermore, php money class neeing more improvements, and can be a class of its own
 

@@ -31,29 +31,39 @@ struct tm extern *g_now;
 
 int main(void){
 
-    ExpVector Ev1;
-    
+	ExpVector Ev1;
+
 	Ev1.loadVctr();
 	Ev1.printVctr();
 	cout << endl << endl;
-	
+	Ev1.exportVctr();
+		
+	int mode = 1; //0,1,2, or 3
 	string date1 = "07/20/2016";
 	string date2 = "07/20/2016";
-	Ev1.printVctrRange(date1,date2);
+	
+	Ev1.printVctrRange(date1,date2,mode);
+	
+	date1 = "02/07/2016";
+	date2 = "02/07/2016";
+	Ev1.printVctrRange(date1,date2,mode);
 	
 	date1 = "02/10/2016";
 	date2 = "08/03/2016";
-	Ev1.printVctrRange(date1,date2);
+	Ev1.printVctrRange(date1,date2,mode);
+	
 		
 	date1 = "02/10/2013";
 	date2 = "08/03/2018";
-	Ev1.printVctrRange(date1,date2);
+	Ev1.printVctrRange(date1,date2,mode);
+	
 	
 	date1 = "02/10/2017";
 	date2 = "08/03/2018";
-	Ev1.printVctrRange(date1,date2);
+	Ev1.printVctrRange(date1,date2,mode);
 
+		
+	
 
-    
     return 0;
 }

@@ -3,6 +3,10 @@
 #include <cstdlib>
 #include "main_classes.h"
 
+#ifndef __AUXILLARY
+#include "auxillary.h"
+#define __AUXILLARY 
+#endif
 
 //define here some test diagnositc enable variables
 #ifndef test
@@ -11,6 +15,10 @@
 
 
 using namespace std;
+
+char extern g_time_buf[30];
+time_t extern g_t;
+struct tm extern *g_now;
 
 void PhPeso::printphp(){
     cout << currency << value << endl;
@@ -38,33 +46,22 @@ ostream& operator<<(ostream &output, const ExpTime &et){
 
 Expenditure::Expenditure(const string curr="Php", const float val=0, const string dc="none"):price(curr,val),description(dc){
 	timestring_now();
-	etime = tmtoExptime();
+	ExpTime exp_timenow_temp(g_now);
+	etime = exp_timenow_temp;
 }
 
-Expenditure::Expenditure(const string date, const string time, const int wday, const string curr, const float val, const string dc):price(curr,val),description(dc){
-	size_t expenditure_tmp_npos = 0;
-	char expenditure_tmp_delim = '/';
-	etime.month = stringtotimedate(date,0,expenditure_tmp_delim,expenditure_tmp_npos);
-	etime.day = stringtotimedate(date,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
-	etime.year = stringtotimedate(date,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
-	
-	expenditure_tmp_npos = 0;
-	expenditure_tmp_delim = ':';
-	etime.hour = stringtotimedate(time,0,expenditure_tmp_delim,expenditure_tmp_npos);
-	etime.min = stringtotimedate(time,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
-	etime.sec = stringtotimedate(time,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
-	
-	etime.wkday = static_cast<timedate_t>(wday);
-}
 
+/*
+void Expenditure::printDate(){
+	cout << etime.month << "/" << etime.day << "/" << etime.year;
+}
+*/
     
 void Expenditure::printExpenditure(){
-    cout << etime.month << "/" << etime.day << "/" << etime.year << "  " 
-	     << etime.hour << ":" << etime.min << ":" << etime.sec << "  "; 
-	cout << etime.stringWkday() << "  ";
-	cout <<'"'<< description << '"' << "\t";
-    price.printphp();
- 
+	etime.printExpTime();
+	cout << "  ";
+    cout <<'"'<< description << '"' << "\t";
+	price.printphp(); 
 }
 
 
@@ -74,88 +71,37 @@ void ExpVector::addEntry(const string curr="Php", const float val=0, const strin
     vecexp.push_back(tmp);
 }
 
+
 //add entry with time record, for loading from csv file
-void ExpVector::addEntry(const string date, const string time, const int wday, const string curr, const float val, const string dc){
+void ExpVector::addEntry(const string date, const string time, const string wday, const string curr, const float val, const string dc){
 	Expenditure tmp(date, time, wday, curr, val, dc);
 	vecexp.push_back(tmp);
 }
 
+/*
 PhPeso ExpVector::addTot(){
     PhPeso tmp;
     for(int i=vecexp.size(); i>0; --i) tmp = tmp + vecexp[i-1].getPrice();
     return tmp;
 }
+*/
     
 void ExpVector::printVctr(){
     for(int i=0; i<vecexp.size(); ++i) vecexp[i].printExpenditure();
 }
 
-void ExpVector::printVctrRange(const string &startdate, const string &enddate){
-	Expenditure prntrng_exp_temp(startdate, "00:00:00", 3, "Php",0,"none");
-	Expenditure prntrng_exp_temp2(enddate, "00:00:00", 3, "Php",0,"none");
-	
-	///////////////////////////////////////////////////////////////////////
-	#ifdef test
-	cout << "prntrng_exp_temp -->";
-	prntrng_exp_temp.printExpenditure();
-	
-	ExpTime testprntrng_exptime_temp = prntrng_exp_temp.getTime();
-	ExpTime testprntrng_exptime_temp2 = prntrng_exp_temp2.getTime();
-	cout << "printing days effective of start date to end date ---> ";
-	cout << testprntrng_exptime_temp.test_get_dayseffective() << "--->>" << testprntrng_exptime_temp2.test_get_dayseffective();
-	cout << endl;
-	#endif
-	////////////////////////////////////////////////////////////////////////
-	
-	//need to put error check see if initial date is out of bounds
-	//if output is true, then can continue with the function
-	Expenditure prntrng_exp_temp3 = vecexp.back();
-	if(!(prntrng_exp_temp <= prntrng_exp_temp3)){
-		cout << "no records for the specified range" << endl << endl;
-		return;
-	}
-	
-	vector<Expenditure>::iterator low;
-	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_exp_temp);
-	
-	#ifdef test
-	cout << "printing the expenditure output of lowerbound function...-->";
-	low->printExpenditure();
-	cout << endl << endl;
-	#endif
-	
-	
-	PhPeso prntrng_moneytot_temp;   //add total functionality
-	for(low; (*low) <= prntrng_exp_temp2; ++low){
-		low->printExpenditure();
-		prntrng_moneytot_temp = prntrng_moneytot_temp + low->getPrice();
-		if( (low+1) == vecexp.end()) break;		//also need to indicate a stop when we go out of bounds
-		
-		#ifdef test
-		testprntrng_exptime_temp = low->getTime();
-		cout << "days effective of last printed entry is... " << testprntrng_exptime_temp.test_get_dayseffective() << endl;
-		cout << "continue the loop??? ....." << ( (*low) <= prntrng_exp_temp2) << endl;
-		cout << "cumulative total is = "; 
-		prntrng_moneytot_temp.printphp(); 
-		cout << endl << endl;
-		#endif
-	}
-	cout << "total expenditure........";
-	prntrng_moneytot_temp.printphp();
-	cout << endl << "done printing entries..." << endl << endl;
-}
 
 
 void ExpVector::exportVctr(){
 	ofstream f_dest("dest-file.csv");
 	for(int i=0; i<vecexp.size(); ++i){
-		PhPeso tmp = vecexp[i].getPrice();	
-		ExpTime tmptime = vecexp[i].getTime();
+		PhPeso exprtvctr_money_tmp = vecexp[i].getPrice();	
+		ExpTime exprtvctr_time_tmp = vecexp[i].getTime();
 		
-		f_dest << tmptime.month << "/" << tmptime.day << "/" << tmptime.year << ",";
-		f_dest << tmptime.hour << ":" << tmptime.min << ":" << tmptime.sec << ",";
-		f_dest << tmptime.wkday << ",";	
-		f_dest << tmp.currency << "," << tmp.value << ",";
+		f_dest << exprtvctr_time_tmp.getDate() << ",";
+		f_dest << exprtvctr_time_tmp.getTime() << ",";
+		f_dest << exprtvctr_time_tmp.stringWkday() << ",";	
+		f_dest << exprtvctr_money_tmp.currency << "," << exprtvctr_money_tmp.value << ",";
 		f_dest << vecexp[i].getDesc() << "\n";
 	}
 	f_dest.close();
@@ -168,16 +114,76 @@ void ExpVector::loadVctr(){
  	while(f_source.good()){
  		for(int x=0; x<5; ++x) getline(f_source,tmp_str[x],',');
  		getline(f_source,tmp_str[5],'\n');
- 		addEntry(tmp_str[0], tmp_str[1], atoi(tmp_str[2].c_str()), tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
+		tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //resolve bug of getline that also stores an extra character \n
+ 		addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
 		
 		//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
 	 }
 	f_source.close();
 	vecexp.pop_back(); //this function copies the null character as the last element, hence remove this
 	
- }
+}
 
- 
+void ExpVector::printVctrRange(const string &startdate, const string &enddate, int &mode){
+	Expenditure prntrng_stexp_temp(startdate, "00:00:00", "Sunday", "Php",0,"none");
+	Expenditure prntrng_endexp_temp(enddate, "00:00:00", "Sunday", "Php",0,"none");
+	PhPeso prntrng_moneytot_temp, prntrng_moneytot_temp2;   //add total functionality
+	Expenditure prntrng_prevexp_temp("00/00/2500","00:00:00","Sunday","Php",0,"none");  //ensures that the loop will start
+	int prntrng_findflag_temp = 0; //check if a valid entry is returned
+	
+	//need to put error check see if initial date is out of bounds, if output is true, then can continue with the function
+	Expenditure prntrng_lstexp_temp = vecexp.back();
+	if(!(prntrng_stexp_temp <= prntrng_lstexp_temp)){
+		cout << "no records for the specified range" << endl << endl;
+		return;
+	}
+	
+	vector<Expenditure>::iterator low;
+	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp); //find initial entry
+		
+	for(low; (*low) <= prntrng_endexp_temp; ++low){
+		prntrng_findflag_temp = 1; //found at least 1 entry
+		
+		#ifdef test
+		cout << "moneytot_temp = ";	
+		prntrng_moneytot_temp.printphp();
+		#endif
+	
+		
+		ExpTime prntrng_currtime_temp1 = low->getTime();
+		ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime(); 
+		prntrng_moneytot_temp2 =  prntrng_moneytot_temp2 + low->getPrice(); //accumulate grand total
+		
+		if(prntrng_currtime_temp1.lessThanEqual(prntrng_prevtime_temp2,mode)) prntrng_moneytot_temp = prntrng_moneytot_temp + low->getPrice(); //compare if same date, prev date will never be > curr date
+		else{ //next date
+			if(mode==3) low->printExpenditure(); //print by entry, always go to this statement
+			else{
+	 			cout << prntrng_prevtime_temp2.getDate(mode) << "\t";
+				prntrng_moneytot_temp.printphp();  
+			   	prntrng_moneytot_temp = low->getPrice(); //reset total count
+			}
+		}
+		prntrng_prevexp_temp = *low;
+		
+		if( (low+1) == vecexp.end()) break;		//also need to indicate a stop when we go out of bounds
+		
+	}
+	
+	if(prntrng_findflag_temp==1){ 	//for queries with only 1 entry
+		//no need for this statement in mode3, since its bool function always return false, hence, always printsexpenditure per entry
+		if(mode!=3){
+			ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime();
+			cout << prntrng_prevtime_temp2.getDate(mode) << "\t";
+			prntrng_moneytot_temp.printphp();
+		}
+		cout << "total expenditure for the said range = ";
+		prntrng_moneytot_temp2.printphp();
+		cout << endl << "done printing entries..." << endl << endl;	
+	}
+	else cout << "no records for specified range" << endl << endl;
+}
+
+
 ////////////////////////////////// 
 //temp files
 //why is this flagging a redefintion error?
@@ -188,5 +194,3 @@ void ExpVector::loadVctr(){
 
 
 
-
- 
