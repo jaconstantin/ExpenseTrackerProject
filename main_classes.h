@@ -63,12 +63,13 @@ public:
 
 class ExpVector{
     vector<Expenditure> vecexp;
+	void emptyExcept(){ if(vecexp.empty()) throw runtime_error("no expense entries on the Database!!"); } //check if empty, throw exception
 public:
     ExpVector(){} //confirmed that this will use a default constructor for the vector, an empty one... ->calls default constructor of vector
     void addEntry(const string curr, const float, const string dc); 
     void addEntry(const string date, const string time, const string wday, const string curr, const float, const string dc);
     //i think the second addentry function must be a private/protected function!
-	//void dropEntry(){ vecexp.pop_back(); }                         //push back interface
+	void dropEntry();                       
     PhPeso addTot();
     
 	void printSize(){ cout << vecexp.size() << endl; }

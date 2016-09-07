@@ -272,7 +272,7 @@
 //now pushing the user interface back to userinterface.h
 
 //list of things that can be improved in the UI
-//1. error checking for inputs - try exceptions here?
+//1. error checking for inputs - try exceptions here? - important to add here the fix, wherein the all typed characters are buffed by cin, including >> << backspace etc...
 //2. appearance... need more print lines to have a pretty nice text data presentation
 //3. probably add an easier print data, wherein give the user the option to simply print all, instead of printing a range
 //4. compile all tests, and perform valgrind to ensure memory leakage
@@ -291,6 +291,49 @@
 ///////////////////////////	
 
 
+//but wait, more test on the compatibility of the csv file
+// test1: manually written in notepad++, ensuring that the last extra line is available... - shows that an extra character is also being read...
+// test2: written in excel as csv, same case, has the extra character
+// test3: all entries only written through the program - generates the correct format, without the extra characters the ruin the printing, also generates the needed extra line
+// test4: can use the fix in loadvctr to load in csv made from notepad or excel, but the fix should be applied only once... 
+		//post editing the entries in that csv in notepad seems ok
+		//unfortunately, adding in entries in that CSV (from notepad) will result in selective entries having the faulty end character....
+		//but, modifying the csv by importing it to excel first, then exporting it again will result in the extra character being present at the end for all entries, hence just need to parse it again properly
+//so for now, since the program does not intend use from the CSV, only from the program, this is acceptable...
+//for test purposes, generating the file from CSV in notepad or excel, just parse it once, then it is good for use in the program
+
+
+//1. convenience function on user interface namely print all entries
+//2. drop function re-instantiated, also added to the user interface - only deletes the last entry
+//3. improved printvctr range, change format of print to date.....price
+//4. added lots of print in user interface, for better appearance to the user
+
+//5 now start with error handling - can implement this with exceptions... for coolness!!
+
+//Probable errors
+	//1. on start of program, always look for a source-file.csv, segfault immediately if file is none existent
+		//throw an exception, create an empty csv file...
+		//however, it is much easier to check if file was opened succesfully, then just don't load, on program exit, the file will be created anyway
+		//note here, the function takes care of the error, hence no exception is needed
+	//2. if csv file is present but empty, any atttempt to print something will also result in segfault, same goes with delete
+		//added a method emptyExcept, which detects if vector is empty, then throw a run time exception - use this in delete and printrng routines
+		//note here, that the handler is then defined on main/UI, the try and catch are defined explicitly, but the handler is empty_error_handler
+	//3. check if the file reading was correct? or if the current file is corrupted?
+		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv
+		
+/////////////////////user usage level errors - wrong entry...
+	//main menu: created a functipon to ensure only integers, as limited by the command will be honored. else, an error is flagged, except for enter, that exits the program immediately
+	//this function was implemented for the two command choices in the UI
+	
+	
+////////////////////lower level errors, such as unsuccesful memory allocation, which can be random, or due to full memory.... etc..
+
+//a quick note on exceptions	
+	//sometimes its nice to just put error handling inside the function itself...
+	//not so sure when is the best time to use exceptions, or simply do it implicitly in the function
+	//can define error handlers, with or without exceptions, though exceptions provide a smart way of transferring control of execution, such as in deep hierarchy of methods...
+
+
 /////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
@@ -300,6 +343,10 @@
 //change2 is to have load and store vector to the same source.csv
 //change3, ensure that UI code is in a separate header file
 //change4, corrected a syntax error bug in auxillary.cpp, timedaywkday function -> saturday condition was wrong
+//change5, uncommented the dropentry function on ExpVector... also added this functionality to the UI
+//change6, improved printvctr range, change format of print to date.....price
+//change7, added error checking to load vector function...
+//change8, added empty vector runtime error throwing method in ExpVector, integrated this to both printvctr and dropentry functions
 
 
 
@@ -308,3 +355,6 @@
 	//lastly, it seems that expenditure memebers are better off public - useless data encapsulation, as we are gettinge each of the members anyway
 	//furthermore, php money class neeing more improvements, and can be a class of its own
 
+//3. check if the file reading was correct? or if the current file is corrupted?
+		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv
+//main menu: almost full proof, except for enter that makes the program terminate and store the current vector

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
+#include <stdexcept>
 #include "main_classes.h"
 
 #ifndef __AUXILLARY
@@ -85,6 +86,11 @@ PhPeso ExpVector::addTot(){
     return tmp;
 }
 */
+
+void ExpVector::dropEntry(){
+	emptyExcept();	//throw exception and abort if vector is empty
+	vecexp.pop_back(); 
+}  
     
 void ExpVector::printVctr(){
     for(int i=0; i<vecexp.size(); ++i) vecexp[i].printExpenditure();
@@ -110,23 +116,33 @@ void ExpVector::exportVctr(){
 
 void ExpVector::loadVctr(){
  	ifstream f_source("source-file.csv");
- 	string tmp_str[6];
- 	while(f_source.good()){
- 		for(int x=0; x<5; ++x) getline(f_source,tmp_str[x],',');
- 		getline(f_source,tmp_str[5],'\n');
-		
-		//tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist
- 		
-		addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
-		//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
-	}
-	f_source.close();
-	vecexp.pop_back(); //this function copies the null character as the last element, hence remove this
 	
-
+	if(f_source) //verify if file was opened succesffully
+	{
+		string tmp_str[6];
+		while(f_source.good())
+		{
+			for(int x=0; x<5; ++x) getline(f_source,tmp_str[x],',');
+			getline(f_source,tmp_str[5],'\n');		
+			//tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist	
+			addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
+			//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
+		}
+		f_source.close();
+		vecexp.pop_back(); //this function copies the null character as the last element, hence remove this
+	}
+	
+	else
+	{
+		cout << endl << "**************************" << endl;
+		cerr << "Warning, could not read from source-file.csv, no data was loaded!\n";
+	}
 }
 
 void ExpVector::printVctrRange(const string &startdate, const string &enddate, int &mode){
+	
+	emptyExcept();	//throw exception and abort if vector is empty
+
 	Expenditure prntrng_stexp_temp(startdate, "00:00:00", "Sunday", "Php",0,"none");
 	Expenditure prntrng_endexp_temp(enddate, "00:00:00", "Sunday", "Php",0,"none");
 	PhPeso prntrng_moneytot_temp, prntrng_moneytot_temp2;   //add total functionality
@@ -136,7 +152,7 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 	//need to put error check see if initial date is out of bounds, if output is true, then can continue with the function
 	Expenditure prntrng_lstexp_temp = vecexp.back();
 	if(!(prntrng_stexp_temp <= prntrng_lstexp_temp)){
-		cout << "no records for the specified range" << endl << endl;
+		cout << "****no records for the specified range****" << endl << endl;
 		return;
 	}
 	
@@ -160,7 +176,7 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 		else{ //next date
 			if(mode==3) low->printExpenditure(); //print by entry, always go to this statement
 			else{
-	 			cout << prntrng_prevtime_temp2.getDate(mode) << "\t";
+	 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
 				prntrng_moneytot_temp.printphp();  
 			   	prntrng_moneytot_temp = low->getPrice(); //reset total count
 			}
@@ -175,14 +191,14 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 		//no need for this statement in mode3, since its bool function always return false, hence, always printsexpenditure per entry
 		if(mode!=3){
 			ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime();
-			cout << prntrng_prevtime_temp2.getDate(mode) << "\t";
+			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
 			prntrng_moneytot_temp.printphp();
 		}
 		cout << "total expenditure for the said range = ";
 		prntrng_moneytot_temp2.printphp();
 		cout << endl << "done printing entries..." << endl << endl;	
 	}
-	else cout << "no records for specified range" << endl << endl;
+	else cout << "****no records for specified range****" << endl << endl;
 }
 
 
