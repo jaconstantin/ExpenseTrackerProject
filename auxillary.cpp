@@ -4,6 +4,7 @@
 #include <string>
 #include <sstream>
 #include <ctime>
+#include <stdexcept>
 #include "auxillary.h"
 
 using namespace std;
@@ -35,6 +36,9 @@ ExpTime::ExpTime(const string date, const string time, const string wday){
 	month = stringtotimedate(date,0,expenditure_tmp_delim,expenditure_tmp_npos);
 	day = stringtotimedate(date,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
 	year = stringtotimedate(date,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
+	
+	//exception routine here for invalid date
+	if( (month > 13) || (day > 31) ) throw runtime_error("invalid date!!");
 	
 	expenditure_tmp_npos = 0;
 	expenditure_tmp_delim = ':';

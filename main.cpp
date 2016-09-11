@@ -37,11 +37,14 @@ void printLines(const int n){
 }
 
 //create reference function for empty vector exception handler
-void emptyErrorHandler(runtime_error &error){
+//actually, this simply print runtime error message, hence, this should be more generic named..
+//so call this runtimeErrorHandler 
+void runtimeErrorHandler(runtime_error &error){
 	cerr << error.what() << endl << endl; 
 }
 
 //input checking for commands, must be an integer 
+//not used, since version 2 is much better
 int getCommand(const int limit){
 	int tmp_getcmd;
 	cout << "Enter command =>  ";
@@ -91,6 +94,35 @@ int getCommand2(int cmd_limit){
 }
 
 
+void getDate(string &date){
+	int flag=1;
+	//cin.ignore();
+	getline(cin,date);
+	//cout << date.size() << endl;
+	
+	while(flag==1){
+		flag=0;
+		
+		if( (date.size()<8)||(date.size()>10) ) flag=1; //detect length of entry
+		else{
+		
+			for(int x=0; x<date.size(); ++x)
+				if( (!isdigit(date[x])) && !(date[x]=='/') ) {   //detect if content of string is purely digits or /
+					flag=1;	
+					break;
+				}
+		}
+		
+		if(flag==1){
+			cout <<  "invalid input bruv!! Enter correct command =>>  ";
+			//cin.ignore(); 
+			getline(cin,date);
+		}
+	}
+	
+			
+}
+
 
 int main(void){
 	
@@ -99,8 +131,8 @@ int main(void){
 ///in this UI, all entries are loaded and stored from a single csv file, source-file.csv
 /////////////////////	
 
-string temp = "hello kitty";
-cout << temp.size() << endl;
+//string temp = "hello kitty";
+//cout << temp.size() << endl;
 
 ExpVector Ev1;
 Ev1.loadVctr();
@@ -161,14 +193,18 @@ while(inf_loop==0){
 			
 			//detect if vector is empty
 			try{ Ev1.printVctrRange("01/01/0001","01/01/2300",mode); }
-			catch (runtime_error &error) { emptyErrorHandler(error); }
+			catch (runtime_error &error) { runtimeErrorHandler(error); }
 				
 			break;
 			
 		case 2:
 			printLines(4);
-			cout << "enter the start date here =>"; cin >> start_date; cout << endl;
-			cout << "enter the end date here =>"; cin >> end_date; cout << endl << endl;
+			cout << "enter date in this format => mm/dd/yyy" << endl;
+			cout << "enter the start date here in =>"; 
+			getDate(start_date);
+			cout << "enter the end date here in =>"; 
+			getDate(end_date);
+			printLines(2);
 			
 			cout << "Press the number enclosed by <> to choose your command" << endl;			
 			cout << "<0>: Summarize expense per day" << endl;
@@ -176,7 +212,7 @@ while(inf_loop==0){
 			cout << "<2>: Summarize expense per year" << endl;
 			cout << "<3>: Summarize expense per entry" << endl;
 			
-			cin.ignore();
+			//cin.ignore();
 			mode = getCommand2(3);
 			
 			
@@ -199,7 +235,7 @@ while(inf_loop==0){
 			
 			//detect if vector is empty
 			try{ Ev1.printVctrRange(start_date,end_date,mode); }
-			catch (runtime_error &error) { emptyErrorHandler(error); }
+			catch (runtime_error &error) { runtimeErrorHandler(error); }
 			
 			//cin.ignore();
 			break;
@@ -215,15 +251,17 @@ while(inf_loop==0){
 			//get line needed as cin will stop buffering on a space
 			//cin.ignore needed, as the enter key from previous cin will be stored in the cin buffer
 			
-			cout << currency << value << description;
+			//cout << currency << value << description;
 			Ev1.addEntry(currency,value,description); 
-			
+			cout << "***Expense is added to the database!***";
+			printLines(4);
 			break;
 		
 		case 4:
 			cout << "now deleting the last entry" << endl << endl;
 			try{ Ev1.dropEntry(); }
-			catch (runtime_error &error) { emptyErrorHandler(error); }
+			catch (runtime_error &error) { runtimeErrorHandler(error); }
+			printLines(2);
 			break;
 			
 		default:

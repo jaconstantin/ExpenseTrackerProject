@@ -2,7 +2,7 @@
 #include <cstdlib>
 #include <string>
 #include <ctime>
-
+#include <stdexcept>
 
 //define here some test diagnositc enable variables
 #ifndef test

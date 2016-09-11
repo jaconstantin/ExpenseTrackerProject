@@ -335,6 +335,29 @@
 
 
 /////////////////////////////////////
+////check point 1.513
+////////////////////////////////////
+//now did some more improvements to main UI
+//next step, is input error checking for the actual expenditure
+	//date entry -> in UI, check the length of characters, isdigit, or / -> done
+	//next level of check should be done inside the function itself - more specifically, in the etime constructor itself
+		//note that this will cover both printrng and addentry functions...
+
+//added the throw statement of etime constructor
+//note in here, another wonder for exceptions, once exception is thrown, it propagates upwards up to main, wherein the same empty vector catch statement, also catches this error
+
+//finally, it seems that the current error handling is sufficient
+
+//next thing that must be done is fixing the testbench, and run valgrinf
+//then maybe start the clean up of the code...
+
+
+/////////////////////////
+///check in as 1.514
+////////////////////////
+
+
+/////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
 
@@ -347,7 +370,7 @@
 //change6, improved printvctr range, change format of print to date.....price
 //change7, added error checking to load vector function...
 //change8, added empty vector runtime error throwing method in ExpVector, integrated this to both printvctr and dropentry functions
-
+//change9, added an invalid date throw exception to exptime constructor
 
 
 //though, want to do something to ensure that we don't compare time on the level of expeniture...
