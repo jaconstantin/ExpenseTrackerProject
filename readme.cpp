@@ -355,6 +355,9 @@
 /////////////////////////
 ///check in as 1.514
 ////////////////////////
+//now moving the entire user interface definition to its own user interface.had
+//anyway, forgot to add one more error checking which is on entry - currency must be purely string with no spaces, money  should be purely digits
+//now done, would like to check this in again as 1.515
 
 
 /////////////////////////////////////
