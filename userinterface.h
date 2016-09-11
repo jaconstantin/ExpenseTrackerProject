@@ -34,6 +34,69 @@ void runtimeErrorHandler(runtime_error &error){
 	cerr << error.what() << endl << endl; 
 }
 
+//mode0:3 -> cmd, date, currency, money
+//used for checking format and white spaces in cmd
+bool cmdCharChk(const char &in, const int &mode){
+	switch(mode){
+		case 1:	return ( (!isdigit(in)) && !(in=='/') );
+		case 2: return (!isalpha(in));						
+		case 3: return ( (!isdigit(in)) && !(in=='.') );
+		default: return (!isdigit(in));						
+	}
+}
+
+
+//mode0:3 -> cmd, date, currency, money
+//get input command with error checks
+//template <typename T>
+string getCmd(const int mode=0, const int cmd_limit=4){
+	string in_temp;
+	int flag=1;
+	//T out_temp;
+	
+	int int_temp;
+	//float float_temp;
+	
+	getline(cin,in_temp);
+	
+	while(flag==1){
+		flag=0;
+		for(int x=0; x<in_temp.size(); ++x)	//check if all characters are valid, including white spaces
+			if(cmdCharChk(in_temp[x],mode)){
+				flag=1;
+				break;
+			}
+		
+		
+		switch(mode){						
+			case 1: 
+				if( (in_temp.size()<8)||(in_temp.size()>10) ) flag=1;	//check the length of date string in mm/dd/yyyy format
+				//out_temp = in_temp;
+				break;
+			case 2:
+				//out_temp = in_temp;
+				break;
+			case 3:
+				 //float_temp = atof(in_temp.c_str());
+				 break;
+			default:
+				//out_temp = atoi(in_temp.c_str());					//check if command is within the allowed 
+				int_temp = atoi(in_temp.c_str());
+				if(int_temp > cmd_limit) flag=1;
+				break;
+		}
+		
+		if(flag==1){
+			cout <<  "invalid input bruv!! Enter correct command =>>  "; 
+			getline(cin,in_temp);
+		}
+		
+	}
+	
+	return in_temp;
+	
+}
+
 
 //get  command input from user, complete with error checks to ensure proper command
 int getCommand(int cmd_limit){
@@ -155,7 +218,7 @@ void UI(){
 	ExpVector Ev1;
 	Ev1.loadVctr();
 
-	string start_date, end_date;
+	string start_date, end_date, cmd_temp;
 	int mode;
 
 	string currency, description;
@@ -181,17 +244,10 @@ void UI(){
 		cout << "<4>: Drop the last entry" << endl;
 		
 		
+
 		//command = getCommand(4);
-		//cin >> command;
-		
-		command = getCommand(4);
-		// if(cin.fail())
-		// {		
-			// cin.clear();
-			// cin.ignore(1000,'\n');
-			// command = 5;
-		// }
-		
+		cmd_temp = getCmd();
+		command = atoi(cmd_temp.c_str());
 		
 		switch(command){
 			case 0:
@@ -218,10 +274,15 @@ void UI(){
 			case 2:
 				printLines(4);
 				cout << "enter date in this format => mm/dd/yyy" << endl;
+				
 				cout << "enter the start date here in =>"; 
-				getDate(start_date);
+				//getDate(start_date);
+				start_date = getCmd(1,0);
+				
 				cout << "enter the end date here in =>"; 
-				getDate(end_date);
+				//getDate(end_date);
+				end_date = getCmd(1,0);
+				
 				printLines(2);
 				
 				cout << "Press the number enclosed by <> to choose your command" << endl;			
@@ -231,7 +292,9 @@ void UI(){
 				cout << "<3>: Summarize expense per entry" << endl;
 				
 				//cin.ignore();
-				mode = getCommand(3);
+				//mode = getCommand(3);
+				cmd_temp = getCmd(0,3);
+				mode = atoi(cmd_temp.c_str());
 				
 				
 				printLines(4);
@@ -262,8 +325,14 @@ void UI(){
 				int buffer_temp;
 				cout << endl << endl << endl;
 				cout << "enter the data for your new expense" << endl;
-				cout << "please enter the currency =>"; getCurrency(currency); 
-				cout << "please enter the value of the expense =>"; getValue(value); 
+				
+				cout << "please enter the currency =>";                //getCurrency(currency);
+				currency = getCmd(2,0);
+				
+				cout << "please enter the value of the expense =>";    //getValue(value); 
+				cmd_temp = getCmd(3,0);
+				value = atof(cmd_temp.c_str());
+								
 				cout << "please enter the description of the expense =>"; 
 				getline(cin,description); cout << endl; 
 				//get line needed as cin will stop buffering on a space

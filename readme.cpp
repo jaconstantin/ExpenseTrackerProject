@@ -359,6 +359,14 @@
 //anyway, forgot to add one more error checking which is on entry - currency must be purely string with no spaces, money  should be purely digits
 //now done, would like to check this in again as 1.515
 
+//////////////////////////////
+////checkin as 1.515
+//////////////////////////////
+//now, i would like to unify getcmd, getDate, getCurrency, and getValue into a single get function
+//finally unified the function, using mode to choose between the 4 getCmd variations
+//note though that I haven't deleted the other functions...
+//check this in as 1.516
+
 
 /////////////////////////////////////
 //Further notes for future work
