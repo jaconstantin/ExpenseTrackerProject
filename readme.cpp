@@ -367,6 +367,12 @@
 //note though that I haven't deleted the other functions...
 //check this in as 1.516
 
+//////////////////////////
+//// checkin as 1.516
+/////////////////////////
+//now, why don't we fix the test sequences
+//unfortunately discovered that the 00/00/0000 is a valid date, which looks ok to me, although it means 0000000000 is a valid date... 000000001 is month 1 etc...
+//so far, the current list of test sequences in main.cpp looks ok, not yet checked in... but to improve the check comments... then run on valgrind...
 
 /////////////////////////////////////
 //Further notes for future work
@@ -392,3 +398,4 @@
 //3. check if the file reading was correct? or if the current file is corrupted?
 		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv
 //main menu: almost full proof, except for enter that makes the program terminate and store the current vector
+//unfortunately discovered that the 00/00/0000 is a valid date, which looks ok to me, although it means 0000000000 is a valid date... 000000001 is month 1 etc...

@@ -184,6 +184,19 @@ date2 = "08/03/2018";
 Ev1.printVctrRange(date1,date2,mode);
 
 
+//////////////////////////////////////////////////////////
+////Stress testing of sequences to simulate user usage
+//////////////////////////////////////////////////////////
+ExpVector Ev1;
+try{ Ev1.printVctrRange("01/01/0001","01/01/2300",mode); }
+catch (runtime_error &error) { runtimeErrorHandler(error); }
+
+
+Ev1.loadVctr();
+try{ Ev1.printVctrRange("01/01/0001","01/01/2300",mode); }
+catch (runtime_error &error) { runtimeErrorHandler(error); }
+
+
 
 /////////////////////////////////
 //other commented sequences

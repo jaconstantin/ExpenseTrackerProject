@@ -48,7 +48,7 @@ private:
     ExpTime etime;
 public:
     Expenditure(const string curr, const float val, const string dc);  //constructor for real time user input
-	Expenditure(const string date = "00/00/00", const string time = "00/00/00", const string wday = "Sunday", const string curr="Php", const float val=0, const string dc="none")
+	Expenditure(const string date = "00/00/0000", const string time = "00/00/00", const string wday = "Sunday", const string curr="Php", const float val=0, const string dc="none")
 		:price(curr,val),description(dc),etime(date,time,wday){} //constructor variation, used for loading from csv file	
 	const PhPeso getPrice() const {return price;}
     const string getDesc() const {return description;}

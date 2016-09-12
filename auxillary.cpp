@@ -38,7 +38,7 @@ ExpTime::ExpTime(const string date, const string time, const string wday){
 	year = stringtotimedate(date,expenditure_tmp_npos+1,expenditure_tmp_delim,expenditure_tmp_npos);
 	
 	//exception routine here for invalid date
-	if( (month > 12) || (day > 31) ) throw runtime_error("invalid date!!");
+	if( (month > 12) || (day > 31) /*|| (month == 0) || (day == 0)*/ ) throw runtime_error("invalid date!!");
 	
 	expenditure_tmp_npos = 0;
 	expenditure_tmp_delim = ':';
