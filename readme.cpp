@@ -374,6 +374,16 @@
 //unfortunately discovered that the 00/00/0000 is a valid date, which looks ok to me, although it means 0000000000 is a valid date... 000000001 is month 1 etc...
 //so far, the current list of test sequences in main.cpp looks ok, not yet checked in... but to improve the check comments... then run on valgrind...
 
+
+////also put all test sequences on the header file
+// added more details to the checks
+//also tested on valgrind
+//now what i want to do is a quick clean up, in preparation for publishing this on git hub...  only code cleanup, no major change, les do it another time...
+
+////////////////////////////////
+////check in as 1.518/////////////
+////////////////////////////////
+
 /////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
