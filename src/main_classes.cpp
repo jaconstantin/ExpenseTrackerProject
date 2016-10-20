@@ -2,6 +2,9 @@
 #include <fstream>
 #include <cstdlib>
 #include <stdexcept>
+//#include <cmath>
+#include <iomanip>
+
 #include "main_classes.h"
 
 #ifndef __AUXILLARY
@@ -21,48 +24,29 @@ char extern g_time_buf[30];
 time_t extern g_t;
 struct tm extern *g_now;
 
-void PhPeso::printphp(){
-    cout << currency << value << endl;
+void PhPeso::printPhp(){
+    cout << currency;
+	cout << std::fixed << std::setprecision(2) << value << endl;
 }
 
 PhPeso PhPeso::operator+(const PhPeso o){
-    PhPeso tmp;
-    tmp.value = value + o.value;
-    return tmp;
+	PhPeso tmpMoney;
+    tmpMoney.value = value + o.value;
+    return tmpMoney;
 }
     
-////////////////
-//put this here for a while, should be in auxillary.cpp
-//don't know how to compile .h files properly!!
-//overload the << operator of ExpTime, for a nice print output
-////////////////
-/* not sure if this is worth it..
-ostream& operator<<(ostream &output, const ExpTime &et){
-	output << et.month << "/" << et.day << "/" << et.year << "  " 
-	       << et.hour << ":" << et.min << ":" << et.sec << "  "; 
-	//strftime(g_time_buf,30,"%x\t%A\t%X",g_now);
-	return output;
-}
-*/    
 
 Expenditure::Expenditure(const string curr="Php", const float val=0, const string dc="none"):price(curr,val),description(dc){
 	timestring_now();
 	ExpTime exp_timenow_temp(g_now);
 	etime = exp_timenow_temp;
 }
-
-
-/*
-void Expenditure::printDate(){
-	cout << etime.month << "/" << etime.day << "/" << etime.year;
-}
-*/
     
 void Expenditure::printExpenditure(){
 	etime.printExpTime();
 	cout << "  ";
     cout <<'"'<< description << '"' << "\t";
-	price.printphp(); 
+	price.printPhp(); 
 }
 
 
@@ -107,7 +91,8 @@ void ExpVector::exportVctr(){
 		f_dest << exprtvctr_time_tmp.getDate() << ",";
 		f_dest << exprtvctr_time_tmp.getTime() << ",";
 		f_dest << exprtvctr_time_tmp.stringWkday() << ",";	
-		f_dest << exprtvctr_money_tmp.currency << "," << exprtvctr_money_tmp.value << ",";
+		//f_dest << exprtvctr_money_tmp.getCurrency() << "," << exprtvctr_money_tmp.getValue() << ",";
+		f_dest << vecexp[i].getPrice().getCurrency() << "," << vecexp[i].getPrice().getValue() << ",";
 		f_dest << vecexp[i].getDesc() << "\n";
 	}
 	f_dest.close();
@@ -164,7 +149,7 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 		
 		#ifdef test
 		cout << "moneytot_temp = ";	
-		prntrng_moneytot_temp.printphp();
+		prntrng_moneytot_temp.printPhp();
 		#endif
 	
 		
@@ -177,7 +162,7 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 			if(mode==3) low->printExpenditure(); //print by entry, always go to this statement
 			else{
 	 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
-				prntrng_moneytot_temp.printphp();  
+				prntrng_moneytot_temp.printPhp();  
 			   	prntrng_moneytot_temp = low->getPrice(); //reset total count
 			}
 		}
@@ -192,10 +177,10 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 		if(mode!=3){
 			ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime();
 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
-			prntrng_moneytot_temp.printphp();
+			prntrng_moneytot_temp.printPhp();
 		}
 		cout << "total expenditure for the said range = ";
-		prntrng_moneytot_temp2.printphp();
+		prntrng_moneytot_temp2.printPhp();
 		cout << endl << "done printing entries..." << endl << endl;	
 	}
 	else cout << "****no records for specified range****" << endl << endl;

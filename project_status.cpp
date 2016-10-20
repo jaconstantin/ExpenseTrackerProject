@@ -384,6 +384,21 @@
 ////check in as 1.518/////////////
 ////////////////////////////////
 
+//********************************************
+//starting from this point, Rev 1.6
+//want to
+	//address most of the desired edits
+	//also clean up the code...
+
+//first edit to address is currency....
+	//instead of changing the class to hold value and centavos, let us just edit the addition operation
+	//modf function from cmath and ctgmath allows us to separate the integer and integral parts -> not good still losing accuracy on the conversion
+	//easier, than changing the entire chain of interface...
+	//final temporary fix, is to add set precision while printing the total sum.... which improves it by a bit, but not for large numbers.. add to future work
+	//made currency members as private and declared interface methods.. fix all problems with this.. done!
+
+//the next batch is a bit tough, so it might be a good idea to have a commit here.... -> do not compare date on expenditure level, found someting on the net...	
+	
 /////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
@@ -393,7 +408,7 @@
 //change2 is to have load and store vector to the same source.csv
 //change3, ensure that UI code is in a separate header file
 //change4, corrected a syntax error bug in auxillary.cpp, timedaywkday function -> saturday condition was wrong
-//change5, uncommented the dropentry function on ExpVector... also added this functionality to the UI
+//change5, uncommented the dropentry function on ExpVector... also added this functionality to the UIs
 //change6, improved printvctr range, change format of print to date.....price
 //change7, added error checking to load vector function...
 //change8, added empty vector runtime error throwing method in ExpVector, integrated this to both printvctr and dropentry functions
@@ -402,10 +417,17 @@
 
 //though, want to do something to ensure that we don't compare time on the level of expeniture...
 //furutre things to do: use Enum to define the mode, 0,1,2 - day, month, year
-	//lastly, it seems that expenditure memebers are better off public - useless data encapsulation, as we are gettinge each of the members anyway
-	//furthermore, php money class neeing more improvements, and can be a class of its own
+
 
 //3. check if the file reading was correct? or if the current file is corrupted?
 		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv
 //main menu: almost full proof, except for enter that makes the program terminate and store the current vector
 //unfortunately discovered that the 00/00/0000 is a valid date, which looks ok to me, although it means 0000000000 is a valid date... 000000001 is month 1 etc...
+
+
+/////////////////
+///future imrpovements
+/////////////////
+//Phpeso use separate int for value and centavo fields
+//Phpeso to support other currencies...
+//Add the capability to delete or edit an expense somewhere in the middle...
