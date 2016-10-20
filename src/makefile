@@ -1,4 +1,4 @@
-INC = ./inc
+INC = ../inc
 OBJS = main.o main_classes.o auxillary.o
 CC = g++
 CFLAGS = -Wall -c 
