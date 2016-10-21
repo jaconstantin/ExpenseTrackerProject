@@ -116,20 +116,20 @@ void ExpTime::printExpTime(){
 
 
 //note the in mode 3, always return false to iterate/print per entry
-const bool ExpTime::lessThan(const ExpTime &o, int mode){
+const bool ExpTime::lessThan(const ExpTime &o, dateMode mode){
 	switch(mode){
-		case 1: return (monthsEffective() < o.monthsEffective());
-		case 2: return (getYears() < o.getYears());
-		case 3: return false;
+		case perMonth: return (monthsEffective() < o.monthsEffective());
+		case perYear: return (getYears() < o.getYears());
+		case perEntry: return false;
 		default: return (daysEffective() < o.daysEffective());
 	}
 }
 
-const bool ExpTime::isEqual(const ExpTime &o, int mode){
+const bool ExpTime::isEqual(const ExpTime &o, dateMode mode){
 	switch(mode){
-		case 1: return (monthsEffective() == o.monthsEffective());
-		case 2: return (getYears() == o.getYears());
-		case 3: return false;
+		case perMonth: return (monthsEffective() == o.monthsEffective());
+		case perYear: return (getYears() == o.getYears());
+		case perEntry: return false;
 		default: return (daysEffective() == o.daysEffective());
 	}
 }

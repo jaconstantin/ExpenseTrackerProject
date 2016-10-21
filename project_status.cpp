@@ -400,6 +400,14 @@
 //the next batch is a bit tough, so it might be a good idea to have a commit here.... -> do not compare date on expenditure level, found someting on the net...	
 	
 /////////////////////////////////////
+//*** Rev 1.601
+/////////////////////////////////////
+	//now have a working function to be used in expenditure level that can eliminate the operator overload
+	//just added one free function to compare date of expenditure to be used as comp in lowerbound
+	//removed all that used <= for expenditure and instead, use getTime() operator instead
+	//enum for printrange mode now also done
+	//now cleanup first.. do a partial commit...
+/////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
 
@@ -415,9 +423,9 @@
 //change9, added an invalid date throw exception to exptime constructor
 
 
-//though, want to do something to ensure that we don't compare time on the level of expeniture...
-//furutre things to do: use Enum to define the mode, 0,1,2 - day, month, year
 
+
+//also the UI make it object oriented
 
 //3. check if the file reading was correct? or if the current file is corrupted?
 		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv

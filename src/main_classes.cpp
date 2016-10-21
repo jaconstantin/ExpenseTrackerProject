@@ -124,7 +124,7 @@ void ExpVector::loadVctr(){
 	}
 }
 
-void ExpVector::printVctrRange(const string &startdate, const string &enddate, int &mode){
+void ExpVector::printVctrRange(const string &startdate, const string &enddate, const dateMode &mode){
 	
 	emptyExcept();	//throw exception and abort if vector is empty
 
@@ -136,15 +136,17 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 	
 	//need to put error check see if initial date is out of bounds, if output is true, then can continue with the function
 	Expenditure prntrng_lstexp_temp = vecexp.back();
-	if(!(prntrng_stexp_temp <= prntrng_lstexp_temp)){
+	//if(!( expDateLessThanEqual(prntrng_stexp_temp,prntrng_lstexp_temp) )){
+	if(!( prntrng_stexp_temp.getTime() <= prntrng_lstexp_temp.getTime() )){
 		cout << "****no records for the specified range****" << endl << endl;
 		return;
 	}
 	
 	vector<Expenditure>::iterator low;
-	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp); //find initial entry
+	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp, expDateLessThan); //find initial entry using function pointer
 		
-	for(low; (*low) <= prntrng_endexp_temp; ++low){
+	//for(low; (*low) <= prntrng_endexp_temp; ++low){ 
+	for(low; (low->getTime() <= prntrng_endexp_temp.getTime()); ++low){
 		prntrng_findflag_temp = 1; //found at least 1 entry
 		
 		#ifdef test
@@ -159,7 +161,7 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 		
 		if(prntrng_currtime_temp1.lessThanEqual(prntrng_prevtime_temp2,mode)) prntrng_moneytot_temp = prntrng_moneytot_temp + low->getPrice(); //compare if same date, prev date will never be > curr date
 		else{ //next date
-			if(mode==3) low->printExpenditure(); //print by entry, always go to this statement
+			if(mode==perEntry) low->printExpenditure(); //print by entry, always go to this statement
 			else{
 	 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
 				prntrng_moneytot_temp.printPhp();  
@@ -173,8 +175,8 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 	}
 	
 	if(prntrng_findflag_temp==1){ 	//for queries with only 1 entry
-		//no need for this statement in mode3, since its bool function always return false, hence, always printsexpenditure per entry
-		if(mode!=3){
+		//no need for this statement in mode 'perEntry', since its bool function always return false, hence, always printsexpenditure per entry
+		if(mode!=perEntry){
 			ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime();
 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
 			prntrng_moneytot_temp.printPhp();
@@ -186,6 +188,24 @@ void ExpVector::printVctrRange(const string &startdate, const string &enddate, i
 	else cout << "****no records for specified range****" << endl << endl;
 }
 
+
+//free functions for comparing expenditures
+bool expDateLessThan(const Expenditure exp1, const Expenditure exp2){ return (exp1.getTime() < exp2.getTime()); }
+//bool expDateLessThanEqual(const Expenditure exp1, const Expenditure exp2){ return (exp1.getTime() <= exp2.getTime()); }
+
+void ExpVector::trialFctn(const string &startdate){
+	cout << "now inside trial function lalala";
+	vector<Expenditure>::iterator low;
+	Expenditure prntrng_stexp_temp(startdate, "00:00:00", "Sunday", "Php",0,"none");
+	//low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp); //find initial entry
+	//cout << endl;
+	//low->printExpenditure();
+	cout << endl << "try again";
+	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp, expDateLessThan);
+	low->printExpenditure();
+	
+	
+}
 
 ////////////////////////////////// 
 //temp files

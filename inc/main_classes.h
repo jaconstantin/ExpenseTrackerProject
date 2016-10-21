@@ -55,8 +55,8 @@ public:
     const ExpTime getTime() const {return etime;}
 	
 	void printExpenditure();
-    const bool operator<(const Expenditure &o) const {return etime < o.etime; } //compare expenditure through its date
-    const bool operator<=(const Expenditure &o) const {return etime <= o.etime;} 
+    //const bool operator<(const Expenditure &o) const {return etime < o.etime; } //compare expenditure through its date
+    //const bool operator<=(const Expenditure &o) const {return etime <= o.etime;} 
 };
 
 
@@ -76,19 +76,18 @@ public:
     void printVctr();    
     
     //mode0 per day, 1 per month, 2 per year, 3 per entry
-    void printVctrRange(const string &startdate, const string &enddate, int &mode);  //note here, can't make this const function due to iterator
+    void printVctrRange(const string &startdate, const string &enddate, const dateMode &mode);  //note here, can't make this const function due to iterator
     
     void exportVctr(); //export current content of a vector to a csv file 
     void loadVctr();
+	
+	void trialFctn (const string &startdate);
+	
     
 };
     
-
-
-
-//temporary classes
-//use of struct Exptime here requires aux.h to be defined first
-
+//free functions for comparing expenditures
+bool expDateLessThan(const Expenditure exp1, const Expenditure exp2);
+//bool expDateLessThanEqual(const Expenditure exp1, const Expenditure exp2);
     
-    
-    
+

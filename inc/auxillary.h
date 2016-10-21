@@ -15,8 +15,8 @@ using namespace std;
 
 //define custom type to be used for date, max value 65000, good enough for 177 years!
 typedef unsigned short timedate_t;
-//enum day_t{Monday=1,Tuesday=2,Wednesday=3,Thursday=4,Friday=5,Saturday=6,Sunday=7}; //special enumtype for encoding wkday
-
+//for summarizing entries
+enum dateMode{perDay,perMonth,perYear,perEntry};
 
 //create our own time structure, make it much smaller than struct tm 36 bytes -> 16 bytes only!!!
 //in the future, maybe make this an object? 
@@ -55,9 +55,9 @@ public:
 	const bool operator<=(const ExpTime &o) const {return daysEffective() <= o.daysEffective();}
 	
 	//create a more general function for comparing etime using day, month, or year, mode0 for day, 1 for month, 2 for year, 3 for per time/entry -- assumes no same entry can be done at the same time
-	const bool lessThan(const ExpTime &o, int mode);
-	const bool isEqual(const ExpTime &o, int mode);
-	const bool lessThanEqual(const ExpTime &o, int mode){return (lessThan(o,mode) || isEqual(o,mode));}
+	const bool lessThan(const ExpTime &o, dateMode mode);
+	const bool isEqual(const ExpTime &o, dateMode mode);
+	const bool lessThanEqual(const ExpTime &o, dateMode mode){return (lessThan(o,mode) || isEqual(o,mode));}
 	
 	//diagnostic functions onnly
 	#ifdef test

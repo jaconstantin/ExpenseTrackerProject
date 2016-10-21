@@ -219,7 +219,7 @@ void UI(){
 	Ev1.loadVctr();
 
 	string start_date, end_date, cmd_temp;
-	int mode;
+	dateMode mode;
 
 	string currency, description;
 	float value;
@@ -256,7 +256,7 @@ void UI(){
 				
 			case 1:
 				printLines(4);
-				mode = 3;
+				mode = perEntry;
 				cout << "*****************************" << endl;
 				cout << "***now printing all entries**" << endl;
 				cout << "*****************************" << endl;
@@ -294,7 +294,7 @@ void UI(){
 				//cin.ignore();
 				//mode = getCommand(3);
 				cmd_temp = getCmd(0,3);
-				mode = atoi(cmd_temp.c_str());
+				mode = static_cast<dateMode>(atoi(cmd_temp.c_str()));
 				
 				
 				printLines(4);
@@ -305,9 +305,9 @@ void UI(){
 				printLines(2);
 				
 				switch(mode){
-					case 0: cout << "date \t price\n"; break;
-					case 1: cout << "month \t price\n"; break;
-					case 2: cout << "year \t price\n"; break;
+					case perDay: cout << "date \t price\n"; break;
+					case perMonth: cout << "month \t price\n"; break;
+					case perYear: cout << "year \t price\n"; break;
 					default: cout << "date \t wkday \t time \t description \t price\n"; break;
 				}
 				
