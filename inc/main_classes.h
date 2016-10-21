@@ -1,8 +1,9 @@
-#include <iostream>
-#include <string>
-#include <vector>
-#include <ctime>
-#include <algorithm>
+//---------------------------------------------------------------------
+//----main_classes.cpp
+//----Author: Jconstan
+//-----contains the main class methods of Expenditure
+//----------------------------------------------------------------------
+
 
 #ifndef __AUXILLARY
 #include "auxillary.h"
@@ -36,7 +37,7 @@ public:
 
 /////////////////////////////////////////////////////////////////////////////////////////////
 //note 1.2
-//Expenditure class as a container for a single expense data
+//Expenditure class as a container for a single expense with time data
 //not really sure if making the elements private is needed - just for proper encapsulation
 //can ensure no stray method will modify this element
 ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -45,49 +46,58 @@ class Expenditure{
     PhPeso price;
     string description;
     ExpTime etime;
+	
 public:
-    Expenditure(const string curr, const float val, const string dc);  //constructor for real time user input
-	Expenditure(const string date = "00/00/0000", const string time = "00/00/00", const string wday = "Sunday", const string curr="Php", const float val=0, const string dc="none")
-		:price(curr,val),description(dc),etime(date,time,wday){} //constructor variation, used for loading from csv file	
+	//constructor for real time user input
+    Expenditure(const string curr, const float val, const string dc);  
+	
+	//constructor variation, used for loading from csv file
+	Expenditure(const string date = "00/00/0000", const string time = "00/00/00", const string wday = "Sunday", const string curr="Php", 
+		const float val=0, const string dc="none"):price(curr,val),description(dc),etime(date,time,wday){} 	
 	
 	const PhPeso getPrice() const {return price;}
     const string getDesc() const {return description;}
     const ExpTime getTime() const {return etime;}
 	
 	void printExpenditure();
-    //const bool operator<(const Expenditure &o) const {return etime < o.etime; } //compare expenditure through its date
-    //const bool operator<=(const Expenditure &o) const {return etime <= o.etime;} 
 };
 
 
+///////////////////////////////////////////////////////////////////////////////////////////////
+//Use Vector from STL as container for the expense database class
+///////////////////////////////////////////////////////////////////////////////////////////////
 
 class ExpVector{
     vector<Expenditure> vecexp;
-	void emptyExcept(){ if(vecexp.empty()) throw runtime_error("no expense entries on the Database!!"); } //check if empty, throw exception
+	void emptyExcept(){ if(vecexp.empty()) throw runtime_error("no expense entries on the Database!!"); }                    //check if empty, throw exception
+	void addEntry(const string date, const string time, const string wday, const string curr, const float, const string dc); //only load can call this
+																															 //include date on input
 public:
-    ExpVector(){} //confirmed that this will use a default constructor for the vector, an empty one... ->calls default constructor of vector
-    void addEntry(const string curr, const float, const string dc); 
-    void addEntry(const string date, const string time, const string wday, const string curr, const float, const string dc);
-    //i think the second addentry function must be a private/protected function!
-	void dropEntry();                       
-    PhPeso addTot();
+    ExpVector(){} 													  //calls default constructor, empty vector
+    void addEntry(const string curr, const float, const string dc);   //real time user input, auto get date
+	void dropEntry();                       					      //delete last entry
     
+	PhPeso addTot();												  //add all expense 
 	void printSize(){ cout << vecexp.size() << endl; }
     void printVctr();    
     
-    //mode0 per day, 1 per month, 2 per year, 3 per entry
-    void printVctrRange(const string &startdate, const string &enddate, const dateMode &mode);  //note here, can't make this const function due to iterator
+    //mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
+    void printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode);  
     
     void exportVctr(); //export current content of a vector to a csv file 
-    void loadVctr();
+    void loadVctr();   //load content of csv to database
 	
-	void trialFctn (const string &startdate);
+
 	
     
 };
-    
+   
+   
+//-------------------------------------------
 //free functions for comparing expenditures
-bool expDateLessThan(const Expenditure exp1, const Expenditure exp2);
-//bool expDateLessThanEqual(const Expenditure exp1, const Expenditure exp2);
+//--------------------------------------------
+
+bool expDateLessThan(const Expenditure exp1, const Expenditure exp2);  //needed by lowerbound function
+
     
 

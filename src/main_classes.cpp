@@ -1,9 +1,16 @@
+//---------------------------------------------------------------------
+//----main_classes.cpp
+//----Author: Jconstan
+//-----contains the main class methods of Expenditure
+//----------------------------------------------------------------------
+
 #include <iostream>
 #include <fstream>
 #include <cstdlib>
 #include <stdexcept>
-//#include <cmath>
 #include <iomanip>
+#include <algorithm>
+#include <vector>
 
 #include "main_classes.h"
 
@@ -20,28 +27,42 @@
 
 using namespace std;
 
-char extern g_time_buf[30];
+//global variables for time
 time_t extern g_t;
 struct tm extern *g_now;
 
+//----------------------------------------
+//PhPeso Method implementations
+//-----------------------------------------
+
+
+//print with format PhpXXXX.XX
 void PhPeso::printPhp(){
     cout << currency;
 	cout << std::fixed << std::setprecision(2) << value << endl;
 }
 
+//convenience function
 PhPeso PhPeso::operator+(const PhPeso o){
 	PhPeso tmpMoney;
     tmpMoney.value = value + o.value;
     return tmpMoney;
 }
-    
 
+   
+//----------------------------------------
+//Expenditure Method implementations
+//-----------------------------------------
+   
+   
+//constructor for real time user input
 Expenditure::Expenditure(const string curr="Php", const float val=0, const string dc="none"):price(curr,val),description(dc){
-	timestring_now();
+	getTimeNow();
 	ExpTime exp_timenow_temp(g_now);
 	etime = exp_timenow_temp;
 }
-    
+
+
 void Expenditure::printExpenditure(){
 	etime.printExpTime();
 	cout << "  ";
@@ -49,6 +70,10 @@ void Expenditure::printExpenditure(){
 	price.printPhp(); 
 }
 
+
+//----------------------------------------
+//Exp Vector Method implementations
+//-----------------------------------------
 
 //add entry, time=now, for real time user input
 void ExpVector::addEntry(const string curr="Php", const float val=0, const string dc="none"){
@@ -81,40 +106,40 @@ void ExpVector::printVctr(){
 }
 
 
-
+//export current content of a vector to a csv file 
 void ExpVector::exportVctr(){
-	ofstream f_dest("source-file.csv");
+	ofstream fDest("source-file.csv");
 	for(int i=0; i<vecexp.size(); ++i){
-		PhPeso exprtvctr_money_tmp = vecexp[i].getPrice();	
-		ExpTime exprtvctr_time_tmp = vecexp[i].getTime();
+		PhPeso tmpPrice = vecexp[i].getPrice();	
+		ExpTime tmpTime = vecexp[i].getTime();
 		
-		f_dest << exprtvctr_time_tmp.getDate() << ",";
-		f_dest << exprtvctr_time_tmp.getTime() << ",";
-		f_dest << exprtvctr_time_tmp.stringWkday() << ",";	
-		//f_dest << exprtvctr_money_tmp.getCurrency() << "," << exprtvctr_money_tmp.getValue() << ",";
-		f_dest << vecexp[i].getPrice().getCurrency() << "," << vecexp[i].getPrice().getValue() << ",";
-		f_dest << vecexp[i].getDesc() << "\n";
+		fDest << tmpTime.getDate() << ",";
+		fDest << tmpTime.getTime() << ",";
+		fDest << tmpTime.getStringWkday() << ",";	
+		//fDest << tmpPrice.getCurrency() << "," << tmpPrice.getValue() << ",";
+		fDest << vecexp[i].getPrice().getCurrency() << "," << vecexp[i].getPrice().getValue() << ",";
+		fDest << vecexp[i].getDesc() << "\n";
 	}
-	f_dest.close();
+	fDest.close();
 }    
 
 
+//load CSV contents to active ExpVector
 void ExpVector::loadVctr(){
- 	ifstream f_source("source-file.csv");
+ 	ifstream fSource("source-file.csv");
 	
-	if(f_source) //verify if file was opened succesffully
+	if(fSource) //verify if file was opened succesffully
 	{
-		string tmp_str[6];
-		while(f_source.good())
+		string tmpStr[6];
+		while(fSource.good())
 		{
-			for(int x=0; x<5; ++x) getline(f_source,tmp_str[x],',');
-			getline(f_source,tmp_str[5],'\n');		
-			//tmp_str[5] = tmp_str[5].substr(0,tmp_str[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist	
-			addEntry(tmp_str[0], tmp_str[1], tmp_str[2], tmp_str[3], atof(tmp_str[4].c_str()), tmp_str[5]);
-			//addEntry(tmp_curr,atof(tmp_value.c_str()),tmp_desc);
+			for(int x=0; x<5; ++x) getline(fSource,tmpStr[x],',');
+			getline(fSource,tmpStr[5],'\n');		
+			//tmpStr[5] = tmpStr[5].substr(0,tmpStr[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist	
+			addEntry(tmpStr[0], tmpStr[1], tmpStr[2], tmpStr[3], atof(tmpStr[4].c_str()), tmpStr[5]);
 		}
-		f_source.close();
-		vecexp.pop_back(); //this function copies the null character as the last element, hence remove this
+		fSource.close();
+		vecexp.pop_back(); //loadVctr copies the null character as the last element, hence remove this last element
 	}
 	
 	else
@@ -124,96 +149,86 @@ void ExpVector::loadVctr(){
 	}
 }
 
-void ExpVector::printVctrRange(const string &startdate, const string &enddate, const dateMode &mode){
-	
-	emptyExcept();	//throw exception and abort if vector is empty
 
-	Expenditure prntrng_stexp_temp(startdate, "00:00:00", "Sunday", "Php",0,"none");
-	Expenditure prntrng_endexp_temp(enddate, "00:00:00", "Sunday", "Php",0,"none");
-	PhPeso prntrng_moneytot_temp, prntrng_moneytot_temp2;   //add total functionality
-	Expenditure prntrng_prevexp_temp("00/00/2500","00:00:00","Sunday","Php",0,"none");  //ensures that the loop will start
-	int prntrng_findflag_temp = 0; //check if a valid entry is returned
+//print depending on mode: 0 per day, 1 per month, 2 per year, 3 per entry
+void ExpVector::printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode){
 	
-	//need to put error check see if initial date is out of bounds, if output is true, then can continue with the function
-	Expenditure prntrng_lstexp_temp = vecexp.back();
-	//if(!( expDateLessThanEqual(prntrng_stexp_temp,prntrng_lstexp_temp) )){
-	if(!( prntrng_stexp_temp.getTime() <= prntrng_lstexp_temp.getTime() )){
+	emptyExcept();			                                                  //throw exception and abort if vector is empty
+
+	Expenditure tmpStartExp(startDate, "00:00:00", "Sunday", "Php",0,"none");
+	Expenditure tmpEndExp(endDate, "00:00:00", "Sunday", "Php",0,"none");
+	Expenditure tmpPrevExp("00/00/2500","00:00:00","Sunday","Php",0,"none");  //ensures that the loop will start
+	
+	PhPeso tmpMoneyTot, tmpMoneyTot2;   
+	int tmpFindFlag = 0;                                                      //check if a valid entry is returned
+	
+	
+	//check if initial date is out of bounds
+	Expenditure tmpLastExp = vecexp.back();
+	if(!( tmpStartExp.getTime() <= tmpLastExp.getTime() )){
 		cout << "****no records for the specified range****" << endl << endl;
 		return;
 	}
 	
+	
+	//find initial entry at StartDate with lower bound using function pointer
 	vector<Expenditure>::iterator low;
-	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp, expDateLessThan); //find initial entry using function pointer
-		
-	//for(low; (*low) <= prntrng_endexp_temp; ++low){ 
-	for(low; (low->getTime() <= prntrng_endexp_temp.getTime()); ++low){
-		prntrng_findflag_temp = 1; //found at least 1 entry
+	low = lower_bound(vecexp.begin(), vecexp.end(), tmpStartExp, expDateLessThan); 
+	
+	
+	//iterate database until endDate
+	for(low; (low->getTime() <= tmpEndExp.getTime()); ++low){
+		tmpFindFlag = 1; 		                                  //found at least 1 entry
 		
 		#ifdef test
 		cout << "moneytot_temp = ";	
-		prntrng_moneytot_temp.printPhp();
+		tmpMoneyTot.printPhp();
 		#endif
 	
+		ExpTime tmpCurrTime = low->getTime();
+		ExpTime tmpPrevTime = tmpPrevExp.getTime(); 
+		tmpMoneyTot2 =  tmpMoneyTot2 + low->getPrice();            //accumulate grand total
 		
-		ExpTime prntrng_currtime_temp1 = low->getTime();
-		ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime(); 
-		prntrng_moneytot_temp2 =  prntrng_moneytot_temp2 + low->getPrice(); //accumulate grand total
 		
-		if(prntrng_currtime_temp1.lessThanEqual(prntrng_prevtime_temp2,mode)) prntrng_moneytot_temp = prntrng_moneytot_temp + low->getPrice(); //compare if same date, prev date will never be > curr date
-		else{ //next date
-			if(mode==perEntry) low->printExpenditure(); //print by entry, always go to this statement
+		 //if same day/month/year/entry, accumulate total
+		if(tmpCurrTime.lessThanEqual(tmpPrevTime,mode)) tmpMoneyTot = tmpMoneyTot + low->getPrice();   
+		else{                                                       //next date
+			if(mode==perEntry) low->printExpenditure();             //print by entry always go to this statement
 			else{
-	 			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
-				prntrng_moneytot_temp.printPhp();  
-			   	prntrng_moneytot_temp = low->getPrice(); //reset total count
+	 			cout << tmpPrevTime.getDate(mode) << ".........";  //print corresponding date 
+				tmpMoneyTot.printPhp();                            //print accumulated total
+			   	tmpMoneyTot = low->getPrice();                     //reset total count
 			}
 		}
-		prntrng_prevexp_temp = *low;
+		tmpPrevExp = *low;
 		
-		if( (low+1) == vecexp.end()) break;		//also need to indicate a stop when we go out of bounds
+		if( (low+1) == vecexp.end()) break;		                   //also need to indicate a stop when we go out of bounds
 		
 	}
 	
-	if(prntrng_findflag_temp==1){ 	//for queries with only 1 entry
+	if(tmpFindFlag==1){ 	//for queries with only 1 entry
 		//no need for this statement in mode 'perEntry', since its bool function always return false, hence, always printsexpenditure per entry
 		if(mode!=perEntry){
-			ExpTime prntrng_prevtime_temp2 = prntrng_prevexp_temp.getTime();
-			cout << prntrng_prevtime_temp2.getDate(mode) << ".........";
-			prntrng_moneytot_temp.printPhp();
+			ExpTime tmpPrevTime = tmpPrevExp.getTime();
+			cout << tmpPrevTime.getDate(mode) << ".........";
+			tmpMoneyTot.printPhp();
 		}
 		cout << "total expenditure for the said range = ";
-		prntrng_moneytot_temp2.printPhp();
+		tmpMoneyTot2.printPhp();
 		cout << endl << "done printing entries..." << endl << endl;	
 	}
 	else cout << "****no records for specified range****" << endl << endl;
 }
 
 
+//-------------------------------------------
 //free functions for comparing expenditures
+//--------------------------------------------
+
 bool expDateLessThan(const Expenditure exp1, const Expenditure exp2){ return (exp1.getTime() < exp2.getTime()); }
-//bool expDateLessThanEqual(const Expenditure exp1, const Expenditure exp2){ return (exp1.getTime() <= exp2.getTime()); }
 
-void ExpVector::trialFctn(const string &startdate){
-	cout << "now inside trial function lalala";
-	vector<Expenditure>::iterator low;
-	Expenditure prntrng_stexp_temp(startdate, "00:00:00", "Sunday", "Php",0,"none");
-	//low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp); //find initial entry
-	//cout << endl;
-	//low->printExpenditure();
-	cout << endl << "try again";
-	low = lower_bound(vecexp.begin(), vecexp.end(), prntrng_stexp_temp, expDateLessThan);
-	low->printExpenditure();
-	
-	
-}
 
-////////////////////////////////// 
-//temp files
-//why is this flagging a redefintion error?
-//Expenditure_temp::Expenditure_temp(const string curr, const float val, const string dc):price(curr,val),description(dc){
-//	timestring_now();
-//	etime = tmtoExptime();
-//};
+
 
 
 

@@ -1,8 +1,9 @@
-#include <iostream>
-#include <cstdlib>
-#include <string>
-#include <ctime>
-#include <stdexcept>
+//---------------------------------------------------------------------
+//----Auxillary.h
+//----Author: Jconstan
+//-----auxillary functions but was used mainly for the date/time classes
+//----------------------------------------------------------------------
+
 
 //define here some test diagnositc enable variables
 #ifndef test
@@ -10,69 +11,64 @@
 #endif
 
 using namespace std;
-//name auxillary for aux functions, but for now is used mainly for the date...
-//technically the date can be an object, though what do we want to do with it? nothing really, just a tag for now, so just have it as a normal struct
 
-//define custom type to be used for date, max value 65000, good enough for 177 years!
-typedef unsigned short timedate_t;
-//for summarizing entries
-enum dateMode{perDay,perMonth,perYear,perEntry};
 
-//create our own time structure, make it much smaller than struct tm 36 bytes -> 16 bytes only!!!
-//in the future, maybe make this an object? 
-	//the point of data encapsulation is to make the implementation hidden to the user
-	//hence, the user is expected to use the function through a limited set of public methods/members, such as view data through a print function... etc...
-	//for this case, can make the time struct private, then maybe the public interface is print date
-	//also a protected function for writing the time and date can be implemented by using standard strings as argument
+typedef unsigned short timeDate_t;				    //define custom type to be used for date, max value 65000, good enough for 177 years!
+enum dateMode_t{perDay,perMonth,perYear,perEntry};  //for summarizing entries
 
+
+//Free functions dealing with time
+void getTimeNow(); 
+timeDate_t stringToTimeDate(const string &dateStr, const size_t sPos, char &delim, size_t &nPos); //helper function that takes in a string format date and time, 
+                                                                                                  //convert it to a single exptime member
+
+//create our own time structure for the expenditure class, make it much smaller than struct tm 36 bytes -> 16 bytes only!!!
 class ExpTime{
-	timedate_t day;
-	timedate_t month;
-	timedate_t year;
-	timedate_t wkday;
-	timedate_t hour;
-	timedate_t min;
-	timedate_t sec;	
+	timeDate_t day;
+	timeDate_t month;
+	timeDate_t year;
+	timeDate_t wkday;
+	timeDate_t hour;
+	timeDate_t min;
+	timeDate_t sec;	
 	
-	timedate_t timedayWkday(const string &day);
-	const int daysEffective()const {return (static_cast<int>(month)*31)+(static_cast<int>(year)*366)+static_cast<int>(day);} //only called by memebr functions
-	const int monthsEffective()const {return static_cast<int>(month)+(static_cast<int>(year)*12);}
+	//only called by member methods
+	//convert string Wkday to timeDate_t
+	timeDate_t getTimeDateWkday(const string &day);	
+	
+	const int getDaysEffective()const {return (static_cast<int>(month)*31)+(static_cast<int>(year)*366)+static_cast<int>(day);} 
+	const int getMonthsEffective()const {return static_cast<int>(month)+(static_cast<int>(year)*12);}
 	const int getYears() const {return (static_cast<int>(year)*12); }
 	
-
 public:
 	ExpTime():day(0),month(0),year(0),wkday(0),hour(0),min(0),sec(0){}
-	ExpTime(tm *time_now);
-	ExpTime(const string date, const string time, const string day);
+	ExpTime(tm *timeNow);
+	ExpTime(const string date, const string time, const string wday);
 	
-	const string stringWkday() const;
-	const string getDate(int mode=0) const;
-	const string getTime() const;
+	const string getStringWkday() const;		           //convert timeDate_t Wkday to string
+	const string getDate(dateMode_t mode=perDay) const;	   //get date in string, format depends on mode: perDay, month, year, or per entry
+	const string getTime() const;			 			   //get time in string hh:mm:ss
 	void printExpTime();
 	
 	//compare etime using date only
-	const bool operator<(const ExpTime &o) const  {return daysEffective() < o.daysEffective();}
-	const bool operator<=(const ExpTime &o) const {return daysEffective() <= o.daysEffective();}
+	const bool operator<(const ExpTime &o) const  {return getDaysEffective() < o.getDaysEffective();}
+	const bool operator<=(const ExpTime &o) const {return getDaysEffective() <= o.getDaysEffective();}
 	
 	//create a more general function for comparing etime using day, month, or year, mode0 for day, 1 for month, 2 for year, 3 for per time/entry -- assumes no same entry can be done at the same time
-	const bool lessThan(const ExpTime &o, dateMode mode);
-	const bool isEqual(const ExpTime &o, dateMode mode);
-	const bool lessThanEqual(const ExpTime &o, dateMode mode){return (lessThan(o,mode) || isEqual(o,mode));}
+	const bool lessThan(const ExpTime &o, dateMode_t mode);
+	const bool isEqual(const ExpTime &o, dateMode_t mode);
+	const bool lessThanEqual(const ExpTime &o, dateMode_t mode){return (lessThan(o,mode) || isEqual(o,mode));}
 	
 	//diagnostic functions onnly
 	#ifdef test
 	const int test_get_dayseffective() const{
-		int testdayseffect_days_temp = dayseffective();
+		int testdayseffect_days_temp = getDaysEffective();
 		return testdayseffect_days_temp;
 	}
 	#endif	
 };
 
-void timestring_now(); //get time
 
-//note, think about making these functions as member function, especilaly ExpTime
-ExpTime tmtoExptime(); //convert the time from struct tm to ExpTime format
-timedate_t stringtotimedate(const string &datestr, const size_t spos, char &delim, size_t &npos); //takes in a string format date and time, convert it to a single exptime member
 
 
 

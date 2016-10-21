@@ -219,7 +219,7 @@ void UI(){
 	Ev1.loadVctr();
 
 	string start_date, end_date, cmd_temp;
-	dateMode mode;
+	dateMode_t mode;
 
 	string currency, description;
 	float value;
@@ -294,7 +294,7 @@ void UI(){
 				//cin.ignore();
 				//mode = getCommand(3);
 				cmd_temp = getCmd(0,3);
-				mode = static_cast<dateMode>(atoi(cmd_temp.c_str()));
+				mode = static_cast<dateMode_t>(atoi(cmd_temp.c_str()));
 				
 				
 				printLines(4);

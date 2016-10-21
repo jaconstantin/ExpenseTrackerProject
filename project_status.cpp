@@ -407,6 +407,13 @@
 	//removed all that used <= for expenditure and instead, use getTime() operator instead
 	//enum for printrange mode now also done
 	//now cleanup first.. do a partial commit...
+	
+////////////////////////////////////
+//** Rev 1.602 CLEANUP
+///////////////////////////////////
+	//done cleaning up except for userinterface.h...
+	
+
 /////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
