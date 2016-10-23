@@ -76,6 +76,9 @@ class CreditExpenditure : public Expenditure{
 	PhPeso creditBalance;
 public:
 	CreditExpenditure(const string curr, const float val, const string dc, const float cpay);
+	CreditExpenditure(const string date = "00/00/0000", const string time = "00/00/00", const string wday = "Sunday", const string curr="Php",
+		const float val=0, const string dc="none", const float cpay=0);
+	
 	virtual void printExpenditure();
 
 };
@@ -84,10 +87,11 @@ public:
 
 ///////////////////////////////////////////////////////////////////////////////////////////////
 //Use Vector from STL as container for the expense database class
+//Use vector of *Expenditure, such that it can contain either Exp of Credit Expenditure
 ///////////////////////////////////////////////////////////////////////////////////////////////
 
 class ExpVector{
-    vector<Expenditure> vecexp;
+    vector<Expenditure*> vecexp;
 	void emptyExcept(){ if(vecexp.empty()) throw runtime_error("no expense entries on the Database!!"); }                    //check if empty, throw exception
 	void addEntry(const string date, const string time, const string wday, const string curr, const float, const string dc); //only load can call this
 																															 //include date on input
@@ -96,8 +100,8 @@ public:
     void addEntry(const string curr, const float, const string dc);   //real time user input, auto get date
 	void dropEntry();                       					      //delete last entry
     
-	PhPeso addTot();												  //add all expense 
-	void printSize(){ cout << vecexp.size() << endl; }
+	//PhPeso addTot();												  //add all expense 
+	//void printSize(){ cout << vecexp.size() << endl; }
     void printVctr();    										      //print all entries
     
     //print entries within specified range of date; mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
@@ -116,7 +120,7 @@ public:
 //free functions for comparing expenditures
 //--------------------------------------------
 
-bool expDateLessThan(const Expenditure exp1, const Expenditure exp2);  //needed by lowerbound function
+bool expDateLessThan(const Expenditure* exp1, const Expenditure* exp2);  //needed by lowerbound function
 
     
 

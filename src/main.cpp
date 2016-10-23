@@ -42,23 +42,49 @@ int main(void){
 	UI session1;
 	session1.launchUI();
 	
-	/*
+	
 	//testing expenditure constructors
+	/*
 	Expenditure exp0;
 	Expenditure exp1("Php",203.04,"some expenditure");
 	Expenditure exp2("08/13/2015","05:45:08","Thursday","Php",1999,"another freakin expense");
 
-	exp0.printExpenditure();
-	exp1.printExpenditure();
-	exp2.printExpenditure();
+	exp0.printExpenditure(); cout << endl;
+	exp1.printExpenditure(); cout << endl;
+	exp2.printExpenditure(); cout << endl;
 	
 	cout << endl << endl << endl;
 	
 	
-	//CreditExpenditure cexp0;
+	CreditExpenditure cexp0;
 	CreditExpenditure cexp1("Php",1000,"some expenditure",200);
-	//cexp0.printExpenditure();
-	cexp1.printExpenditure();
+	CreditExpenditure cexp2("08/13/2015","05:45:08","Thursday","Php",1999,"another freakin expense",999);
+	cexp0.printExpenditure(); cout << endl;
+	cexp1.printExpenditure(); cout << endl;
+	cexp2.printExpenditure();
+	
+	cout << endl << endl << endl;
+	
+	ExpVector Ev1;
+
+	Ev1.loadVctr();
+	Ev1.printVctr();
+	
+	cout << endl << endl << endl;
+	
+	//Ev1.addEntry("USD",298.99,"asus transformer t100ha");
+	//Ev1.addEntry("Php",100.34,"the game of thrones");
+	//Ev1.addEntry("Php",200.36,"pamana crispy adobo");
+	
+	//Ev1.exportVctr();
+	*/
+	/*
+	string startDate = "07/20/2018";
+	string endDate = "08/21/2019";
+	
+	Expenditure tmpStartExp(startDate, "00:00:00", "Sunday", "Php",0,"none");
+	Expenditure *ptrEndExp = new Expenditure(endDate, "00:00:00", "Sunday", "Php",0,"none");
+	Expenditure *ptrStartExp = &tmpStartExp;
 	*/
 	
 	return 0;	

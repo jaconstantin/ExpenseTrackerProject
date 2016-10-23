@@ -429,6 +429,11 @@
 	//made printexpenditure virtual and made a new one for creditexpenditure
 	//small edit to auxillary.cpp in printing string Wkday to make it more presentable
 	//as of now, the print was modified to look great, but this required a couple of changes... commit this for now...
+	//addition of the CreditExpenditure class looks successful..
+
+//next major step is the modification of ExpVector to contain a pointer of expenditures, instead of expenditure....
+	//this is done... noting that there had been a lot of changes in the expVector class to accomodate for chagning it from expedniture vector to *exp vector
+	//commit as rev2.01
 	
 /////////////////////////////////////
 //Further notes for future work

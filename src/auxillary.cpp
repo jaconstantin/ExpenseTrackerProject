@@ -81,13 +81,13 @@ ExpTime::ExpTime(const string date, const string time, const string wday){
 const string ExpTime::getStringWkday() const{
 	
 	switch(wkday){	
-		case 1:  return "Monday   ";
-		case 2:  return "Tuesday  ";
+		case 1:  return "Monday";
+		case 2:  return "Tuesday";
 		case 3:  return "Wednesday";
-		case 4:  return "Thursday ";
-		case 5:  return "Friday   ";
-		case 6:  return "Saturday ";
-		default: return "Sunday   ";
+		case 4:  return "Thursday";
+		case 5:  return "Friday";
+		case 6:  return "Saturday";
+		default: return "Sunday";
 	}
 }
 
@@ -134,7 +134,7 @@ const string ExpTime::getTime() const{
 
 void ExpTime::printExpTime(){
 	cout << getDate() << "  ";
-	cout << getStringWkday() << "  ";
+	cout << std::setfill(' ') << std::setw(10) << getStringWkday() << "  ";
 	cout << getTime();
 }
 
