@@ -20,10 +20,7 @@
 #define __AUXILLARY 
 #endif
 
-#include "userinterface.h"
-
-
-//define here a variable for test diagnositc messages
+#include "ui.h"
 
 
 using namespace std;
@@ -42,7 +39,8 @@ int main(void){
 ///in this UI, all entries are loaded and stored from a single csv file, source-file.csv
 /////////////////////	
 
-
-	UI();
+	UI session1;
+	session1.launchUI();
+	
 	return 0;	
 }

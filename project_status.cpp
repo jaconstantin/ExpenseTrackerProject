@@ -412,7 +412,8 @@
 //** Rev 1.602 CLEANUP
 ///////////////////////////////////
 	//done cleaning up except for userinterface.h...
-	
+	//now added a new file ui.cpp and ui.h, to fully integrate this
+	//now done mark this as Rev 1.61!!! Release!!
 
 /////////////////////////////////////
 //Further notes for future work

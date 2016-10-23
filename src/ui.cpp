@@ -3,22 +3,15 @@
 //----Author: Jconstan
 //-----contains the ui class for the userinterface
 //----------------------------------------------------------------------
-//g++ ui.cpp main_classes.cpp auxillary.cpp -o ui -I../inc
-//put the tb in here as well for now
+
 
 #include <iostream>
-//#include <cstdlib>
-//#include <fstream>
-//#include <string>
 #include <vector>
-//#include <ctime>
-//#include <stdexcept>
 #include <algorithm>
 #include <cctype>
 
+
 //note here, to avoid the conflict in compiling when including the same header file
-
-
 #ifndef __MAIN_CLASSES
 #include "main_classes.h"
 #define __MAIN_CLASSES 
@@ -111,7 +104,7 @@ string UI::getUsrInput(usrInput_t inType, const int cmdLimit){
 }
 
 
-void UI::launchUI(){
+int UI::launchUI(){
 	
 	string tmpStartDate, tmpEndDate, tmpUsrIn;
 	dateMode_t tmpDateMode;
@@ -249,20 +242,13 @@ void UI::launchUI(){
 			
 		
 		if(userCmd==0){
-			expDatabase.exportVctr();
+			//expDatabase.exportVctr();
 			break;
 		}
 		
 	}
 	
-
-	
-}
-
-int main(void){
-	
-	UI session1;
-	session1.launchUI();
-	
 	return 0;
+	
 }
+

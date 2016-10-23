@@ -17,6 +17,6 @@ class UI{
 	
 public:
 	UI();			                                                   //default constructor, initialize by loading source file to database
-	void launchUI();
+	int launchUI();
 };
 
