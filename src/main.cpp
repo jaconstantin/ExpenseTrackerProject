@@ -11,7 +11,7 @@
 //note here, to avoid the conflict in compiling when including the same header file
 
 #ifndef __MAIN_CLASSES
-#include "main_classes.h"
+#include "main_classes_v2.h"
 #define __MAIN_CLASSES 
 #endif
 
@@ -41,6 +41,25 @@ int main(void){
 
 	UI session1;
 	session1.launchUI();
+	
+	/*
+	//testing expenditure constructors
+	Expenditure exp0;
+	Expenditure exp1("Php",203.04,"some expenditure");
+	Expenditure exp2("08/13/2015","05:45:08","Thursday","Php",1999,"another freakin expense");
+
+	exp0.printExpenditure();
+	exp1.printExpenditure();
+	exp2.printExpenditure();
+	
+	cout << endl << endl << endl;
+	
+	
+	//CreditExpenditure cexp0;
+	CreditExpenditure cexp1("Php",1000,"some expenditure",200);
+	//cexp0.printExpenditure();
+	cexp1.printExpenditure();
+	*/
 	
 	return 0;	
 }

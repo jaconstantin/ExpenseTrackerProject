@@ -415,6 +415,21 @@
 	//now added a new file ui.cpp and ui.h, to fully integrate this
 	//now done mark this as Rev 1.61!!! Release!!
 
+
+/////////////////////////////////
+//Start of Rev 2.0 Inheritance
+////////////////////////////////
+
+//introduce the feautre of credit card information - now adding this new class
+
+//required changes	
+	//Expenditure private members must be changed to protected to allow inherited class access
+	//added operator- for PhPeso
+	//deleted the newline in printPhp and added it to print expenditure
+	//made printexpenditure virtual and made a new one for creditexpenditure
+	//small edit to auxillary.cpp in printing string Wkday to make it more presentable
+	//as of now, the print was modified to look great, but this required a couple of changes... commit this for now...
+	
 /////////////////////////////////////
 //Further notes for future work
 ////////////////////////////////////
@@ -433,7 +448,7 @@
 
 
 
-//also the UI make it object oriented
+
 
 //3. check if the file reading was correct? or if the current file is corrupted?
 		//this one is nice to have, let us skip it for now, since the intended usage is from the PC, not from the csv
