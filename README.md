@@ -29,6 +29,10 @@ Summary of files
 	* main.cpp - main function
 	* main_classes.cpp - contains the class declarations and method implementations
 	* auxilary.cpp - contains all class and methods associated with getting the current time.
-	* userinterface.h - contains the user interface, that is currently implemented as an ordinary header.
+	* ui.cpp - contains the userinteface class to be used on main
 	* source-file.csv - text file for storing the database
 	* project_status.cpp - rough diary and documentation of the project
+	* test_sequences.h - contains testing sequences that were used in intermediate testing of functions, might be a bit outdated...
+	
+	* userinterface.h - contains old references for doing the user interface
+	
