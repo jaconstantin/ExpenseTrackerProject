@@ -1,5 +1,5 @@
 //---------------------------------------------------------------------
-//----main_classes.cpp
+//----main_classes.h
 //----Author: Jconstan
 //-----contains the main class methods of Expenditure
 //----------------------------------------------------------------------
@@ -79,9 +79,9 @@ public:
     
 	PhPeso addTot();												  //add all expense 
 	void printSize(){ cout << vecexp.size() << endl; }
-    void printVctr();    
+    void printVctr();    										      //print all entries
     
-    //mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
+    //print entries within specified range of date; mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
     void printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode);  
     
     void exportVctr(); //export current content of a vector to a csv file 

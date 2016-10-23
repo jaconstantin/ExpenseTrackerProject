@@ -96,11 +96,15 @@ PhPeso ExpVector::addTot(){
 }
 */
 
+
+//delete last entry
 void ExpVector::dropEntry(){
 	emptyExcept();	//throw exception and abort if vector is empty
 	vecexp.pop_back(); 
 }  
-    
+
+
+//print all entries    
 void ExpVector::printVctr(){
     for(int i=0; i<vecexp.size(); ++i) vecexp[i].printExpenditure();
 }
@@ -150,7 +154,7 @@ void ExpVector::loadVctr(){
 }
 
 
-//print depending on mode: 0 per day, 1 per month, 2 per year, 3 per entry
+//print entries within specified range of date depending on mode: 0 per day, 1 per month, 2 per year, 3 per entry
 void ExpVector::printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode){
 	
 	emptyExcept();			                                                  //throw exception and abort if vector is empty
