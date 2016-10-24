@@ -6,11 +6,13 @@
 
 #include <iostream>
 #include <fstream>
+#include <sstream>
 #include <cstdlib>
 #include <stdexcept>
 #include <iomanip>
 #include <algorithm>
 #include <vector>
+#include <cstring>
 
 #include "main_classes_v2.h"
 
@@ -78,8 +80,23 @@ void Expenditure::printExpenditure(){
 }
 
 
+//print expenditure to string in csv format
+string Expenditure::getCsvToString(){
+	
+	stringstream tmpStream;
+	
+	tmpStream << etime.getDate() << "," << etime.getTime() << ","
+	          << etime.getStringWkday() << "," << price.getCurrency() << ","
+	          << price.getValue() << "," << description;
+	
+	return tmpStream.str();
+}
+
+
 //----------------------------------------
 //CreditExpenditure Method implementations
+//Inherits from Expenditure
+//all money member use same currency
 //-----------------------------------------
 //constructor for real time user input
 CreditExpenditure::CreditExpenditure(const string curr="Php", const float val=0, const string dc="none", const float cpay=0):
@@ -93,13 +110,6 @@ CreditExpenditure::CreditExpenditure(const string curr="Php", const float val=0,
 }
 
 
-CreditExpenditure::CreditExpenditure(const string date, const string time, const string wday, const string curr,
-	const float val, const string dc, const float cpay):Expenditure(date,time,wday,curr,val,dc),cashPayment(curr,cpay){
-	
-	creditBalance = price-cashPayment;
-}
-
-
 //extend base class print function
 void CreditExpenditure::printExpenditure(){	
 	Expenditure::printExpenditure();
@@ -107,6 +117,18 @@ void CreditExpenditure::printExpenditure(){
 	cout << "\t"; creditBalance.printPhp(); 
 }
 
+
+//extends base class store to string in csv format 
+string CreditExpenditure::getCsvToString(){
+	
+	stringstream tmpStream;
+	
+	tmpStream << Expenditure::getCsvToString() << ","
+			  << cashPayment.getValue() << ","
+			  << creditBalance.getValue();
+	
+	return tmpStream.str();
+}
 
 
 //----------------------------------------
@@ -126,6 +148,22 @@ void ExpVector::addEntry(const string date, const string time, const string wday
 	Expenditure *tmp = new Expenditure(date, time, wday, curr, val, dc);
 	vecexp.push_back(tmp);
 }
+
+
+//real time user input for CreditExpenditure, use of polymorphism...
+void ExpVector::addEntry(const string curr, const float val, const string dc, const float cpay){
+	Expenditure *tmp = new CreditExpenditure(curr,val,dc,cpay);
+    vecexp.push_back(tmp);
+}
+
+//loadVctr input for CreditExpenditure
+void ExpVector::addEntry(const string date, const string time, const string wday, const string curr, 				   
+		const float val, const string dc, const float cpay, const float cbalance){
+
+	Expenditure *tmp = new CreditExpenditure(date, time, wday, curr, val, dc, cpay, cbalance);
+	vecexp.push_back(tmp);		
+}
+
 
 /*
 PhPeso ExpVector::addTot(){
@@ -155,42 +193,49 @@ void ExpVector::printVctr(){
 
 
 
-//export current content of a vector to a csv file 
-void ExpVector::exportVctr(){
-	ofstream fDest("source-file.csv");
-	for(int i=0; i<vecexp.size(); ++i){
-		PhPeso tmpPrice = vecexp[i]->getPrice();	
-		ExpTime tmpTime = vecexp[i]->getTime();
-		
-		fDest << tmpTime.getDate() << ",";
-		fDest << tmpTime.getTime() << ",";
-		fDest << tmpTime.getStringWkday() << ",";	
-		//fDest << tmpPrice.getCurrency() << "," << tmpPrice.getValue() << ",";
-		fDest << vecexp[i]->getPrice().getCurrency() << "," << vecexp[i]->getPrice().getValue() << ",";
-		fDest << vecexp[i]->getDesc() << "\n";
+//export current content of a vector to a csv file, getCsvfunction for Expenditure or CreditExpenditure maybe called
+void ExpVector::exportVctr(const char* fName){
+	ofstream fDest(fName);
+	
+	for(int i=0; i<vecexp.size(); ++i){	
+		fDest << vecexp[i]->getCsvToString();
+		fDest << "\n";
 	}
+	
 	fDest.close();
 }    
 
 
 
 //load CSV contents to active ExpVector
-void ExpVector::loadVctr(){
- 	ifstream fSource("source-file.csv");
+void ExpVector::loadVctr(const char* fName){
+ 	ifstream fSource(fName);
+	
+	string tmpStr1 = "source-file.csv";
+	string tmpStr2 = fName;
 	
 	if(fSource) //verify if file was opened succesffully
 	{
-		string tmpStr[6];
+		string tmpStr[8];
 		while(fSource.good())
-		{
-			for(int x=0; x<5; ++x) getline(fSource,tmpStr[x],',');
-			getline(fSource,tmpStr[5],'\n');		
-			//tmpStr[5] = tmpStr[5].substr(0,tmpStr[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist	
-			addEntry(tmpStr[0], tmpStr[1], tmpStr[2], tmpStr[3], atof(tmpStr[4].c_str()), tmpStr[5]);
+		{	
+			if(tmpStr1.compare(tmpStr2)==0){   //if source-file.csv, load an Expenditure						
+				for(int x=0; x<5; ++x) getline(fSource,tmpStr[x],',');
+				getline(fSource,tmpStr[5],'\n');		
+				////please view Note jcImpt1
+				addEntry(tmpStr[0], tmpStr[1], tmpStr[2], tmpStr[3], atof(tmpStr[4].c_str()), tmpStr[5]);
+			}
+			else{                              //if source-file-credit.csv, load a CreditExpenditure	
+				for(int x=0; x<7; ++x) getline(fSource,tmpStr[x],',');
+				getline(fSource,tmpStr[7],'\n');	
+				
+				addEntry( tmpStr[0], tmpStr[1], tmpStr[2], tmpStr[3], atof(tmpStr[4].c_str()), tmpStr[5], 
+					atof(tmpStr[6].c_str()), atof(tmpStr[7].c_str()) );		
+			}
 		}
 		fSource.close();
-		dropEntry();				//loadVctr copies the null character as the last element, hence remove this last element
-		//vecexp.pop_back(); 
+		dropEntry();		                   //loadVctr copies the null character as the last element, hence remove this last element
+	
 	}
 	
 	else

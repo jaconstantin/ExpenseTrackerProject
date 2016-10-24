@@ -13,7 +13,7 @@
 
 //note here, to avoid the conflict in compiling when including the same header file
 #ifndef __MAIN_CLASSES
-#include "main_classes.h"
+#include "main_classes_v2.h"
 #define __MAIN_CLASSES 
 #endif
 
@@ -33,7 +33,7 @@ using namespace std;
 
 //default constructor, initialize by loading source file to database
 UI::UI(){
-	expDatabase.loadVctr();
+	expDatabase.loadVctr("source-file.csv");
 	userCmd=0;
 }
 
@@ -135,10 +135,12 @@ int UI::launchUI(){
 		tmpUsrIn = getUsrInput();					 //get user input cmd as string, check format, then convert to int
 		userCmd = atoi(tmpUsrIn.c_str()); 
 		
+		//const char* fName = "source-file.csv";
+		
 		switch(userCmd){
 			
 			case 0:   //exit program
-				expDatabase.exportVctr();
+				expDatabase.exportVctr("source-file.csv");
 				break;
 			
 			

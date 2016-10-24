@@ -434,6 +434,18 @@
 //next major step is the modification of ExpVector to contain a pointer of expenditures, instead of expenditure....
 	//this is done... noting that there had been a lot of changes in the expVector class to accomodate for chagning it from expedniture vector to *exp vector
 	//commit as rev2.01
+
+
+////////////////////////////
+////Rev 2.01	
+///////////////////////////
+
+//now start doing functions for the creditExpedniture version... add entry, delete and print is done...
+//next major step here is exportVctr and LoadVctr... maybe exportVctr first....
+//export Vctr done, created an intermediate expenditure functon getCsvExpenditure for both classes
+//load vctr also done, made the loading depend ont he file name of the source file: source-file.csv or source-file-credit.csv
+//maybe commit this for now..
+
 	
 /////////////////////////////////////
 //Further notes for future work
@@ -467,3 +479,8 @@
 //Phpeso use separate int for value and centavo fields
 //Phpeso to support other currencies...
 //Add the capability to delete or edit an expense somewhere in the middle...
+
+///////////////////
+////important notes
+////Note jcImpt1
+//tmpStr[5] = tmpStr[5].substr(0,tmpStr[5].size()-1); //this line is needed to remove the exta space for source files written manually in excel... once the program is run, and the vector is stored back to the file, this extra space will no longer exist	
