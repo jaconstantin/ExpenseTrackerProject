@@ -93,6 +93,25 @@ string Expenditure::getCsvToString(){
 }
 
 
+//accumulate money value to array
+void Expenditure::accumulateMoney(PhPeso money[3]){
+	money[0] = money[0] + price;
+}
+
+
+//get money value to array
+void Expenditure::getMoney(PhPeso money[3]){
+	money[0] = price;
+}
+
+
+//print money related data of array
+void Expenditure::printMoney(PhPeso money[3]){
+	money[0].printPhp();
+	cout << endl;
+}
+
+
 //----------------------------------------
 //CreditExpenditure Method implementations
 //Inherits from Expenditure
@@ -129,6 +148,30 @@ string CreditExpenditure::getCsvToString(){
 	
 	return tmpStream.str();
 }
+
+void CreditExpenditure::accumulateMoney(PhPeso money[3]){
+	money[0] = money[0] + price;
+	money[1] = money[1] + cashPayment;
+	money[2] = money[2] + creditBalance;
+}
+
+
+//get money value to array
+void CreditExpenditure::getMoney(PhPeso money[3]){
+	money[0] = price;
+	money[1] = cashPayment;
+	money[2] = creditBalance;
+}
+
+
+//print money related data of array
+void CreditExpenditure::printMoney(PhPeso money[3]){
+	money[0].printPhp(); cout << "\t";
+	money[1].printPhp(); cout << "\t";
+	money[2].printPhp(); cout << "\t";
+	cout << endl;
+}
+
 
 
 //----------------------------------------
@@ -255,7 +298,7 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 	Expenditure *tmpEndExp = new Expenditure(endDate, "00:00:00", "Sunday", "Php",0,"none");
 	Expenditure *tmpPrevExp = new Expenditure("00/00/2500","00:00:00","Sunday","Php",0,"none");  //ensures that the loop will start
 	
-	PhPeso tmpMoneyTot, tmpMoneyTot2;   
+	PhPeso tmpMoneyTot[3], tmpMoneyTot2[3]; 								  //support both Expenditure and CreditExpenditure  
 	int tmpFindFlag = 0;                                                      //check if a valid entry is returned
 	
 	
@@ -276,27 +319,29 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 	for(low; ((*low)->getTime() <= tmpEndExp->getTime()); ++low){
 		tmpFindFlag = 1; 		                                  //found at least 1 entry
 		
-		#ifdef test
-		cout << "moneytot_temp = ";	
-		tmpMoneyTot.printPhp();
-		#endif
+		//#ifdef test
+		//cout << "moneytot_temp = ";	
+		//tmpMoneyTot.printPhp();
+		//#endif
 	
 		ExpTime tmpCurrTime = (*low)->getTime();
 		ExpTime tmpPrevTime = tmpPrevExp->getTime(); 
-		tmpMoneyTot2 =  tmpMoneyTot2 + (*low)->getPrice();            //accumulate grand total
+		(*low)->accumulateMoney(tmpMoneyTot2);                    //accumulate grand total
 		
 		
 		 //if same day/month/year/entry, accumulate total
-		if(tmpCurrTime.lessThanEqual(tmpPrevTime,mode)) tmpMoneyTot = tmpMoneyTot + (*low)->getPrice();   
-		else{                                                      //next date
+		if(tmpCurrTime.lessThanEqual(tmpPrevTime,mode)) (*low)->accumulateMoney(tmpMoneyTot);   
+		else{                                                        //next date
 			if(mode==perEntry){
-				(*low)->printExpenditure();                           //print by entry always go to this statement
+				(*low)->printExpenditure();                          //print by entry always go to this statement
 				cout << endl;
 			} 
 			else{
-	 			cout << tmpPrevTime.getDate(mode) << ".........";  //print corresponding date 
-				tmpMoneyTot.printPhp(); cout << endl;              //print accumulated total
-			   	tmpMoneyTot = (*low)->getPrice();                     //reset total count
+	 			cout << tmpPrevTime.getDate(mode) << ".........";    //print corresponding date 
+				//tmpMoneyTot.printPhp(); cout << endl;              //print accumulated total
+			   	//tmpMoneyTot = (*low)->getPrice();                  //reset total count
+				(*low)->printMoney(tmpMoneyTot);
+				(*low)->getMoney(tmpMoneyTot);
 			}
 		}
 		tmpPrevExp = *low;
@@ -310,10 +355,11 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 		if(mode!=perEntry){
 			ExpTime tmpPrevTime = tmpPrevExp->getTime();
 			cout << tmpPrevTime.getDate(mode) << ".........";
-			tmpMoneyTot.printPhp(); cout << endl;
+			//tmpMoneyTot.printPhp(); cout << endl;
+			(*low)->printMoney(tmpMoneyTot);
 		}
 		cout << "total expenditure for the said range = ";
-		tmpMoneyTot2.printPhp();
+		(*low)->printMoney(tmpMoneyTot2);
 		cout << endl << "done printing entries..." << endl << endl;	
 	}
 	else cout << "****no records for specified range****" << endl << endl;

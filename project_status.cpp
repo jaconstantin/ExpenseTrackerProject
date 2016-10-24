@@ -446,6 +446,18 @@
 //load vctr also done, made the loading depend ont he file name of the source file: source-file.csv or source-file-credit.csv
 //maybe commit this for now..
 
+
+/////////////////////////
+////Rev2.02
+/////////////////////////
+//now implement printVctr range for both
+//added more helper functions in expenditure: accumulateMoney, printMoney, and getMoney
+//this methods are vitueal, Expenditure and CreditExpenditure have their own separate implementations
+//allows having the same printVctrRange function... neat!! commit now!!
+//take note to copy the new test sequences to a different header file...
+
+
+
 	
 /////////////////////////////////////
 //Further notes for future work

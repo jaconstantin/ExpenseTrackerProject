@@ -62,8 +62,12 @@ public:
     const string getDesc() const {return description;}
     const ExpTime getTime() const {return etime;}
 	
+	//overloaded/extended functions, to ease interface of main and inherited class to ExpVector Methods
 	virtual void printExpenditure();
-	virtual string getCsvToString();                                      //print expenditure to string in csv format
+	virtual string getCsvToString();                              //print expenditure to string in csv format
+	virtual void accumulateMoney(PhPeso money[3]);			   	  //accumulate money value to array
+	virtual void getMoney(PhPeso money[3]);			              //get money value to array
+	virtual void printMoney(PhPeso money[3]);			          //print money related data of array
 };
 
 
@@ -85,8 +89,13 @@ public:
 		const string curr="Php", const float val=0, const string dc="none", const float cpay=0, const float cbalance=0):
 		Expenditure(date,time,wday,curr,val,dc),cashPayment(curr,cpay),creditBalance(curr,cbalance){}
 	
+	
+	//extended base class functions
 	virtual void printExpenditure();
-	virtual string getCsvToString();      //store to string in csv format 
+	virtual string getCsvToString();                    //store to string in csv format 
+	virtual void accumulateMoney(PhPeso money[3]);	    //accumulate money value to array
+	virtual void getMoney(PhPeso money[3]);			    //get money value to array
+	virtual void printMoney(PhPeso money[3]);			//print money related data of array
 };
 
 
@@ -99,12 +108,13 @@ public:
 class ExpVector{
     vector<Expenditure*> vecexp;
 	void emptyExcept(){ if(vecexp.empty()) throw runtime_error("no expense entries on the Database!!"); }   //check if empty, throw exception
+public:	
 	void addEntry(const string date, const string time, const string wday, const string curr,               //for Expenditure, include time info
 		const float val, const string dc);                                                                  //only loadVctr can call this  
 	void addEntry(const string date, const string time, const string wday, const string curr, 				   
 		const float val, const string dc, const float cpay, const float cbalance);                          //for CreditExpenditure, include time info
 	
-public:
+
     ExpVector(){} 													                   //calls default constructor, empty vector
     void addEntry(const string curr, const float, const string dc);                    //real time user input for Expenditure, auto get date
 	void addEntry(const string curr, const float, const string dc, const float cpay);  //real time user input for CreditExpenditure
