@@ -471,8 +471,11 @@
 //make main_v2 compatible with ui.cpp meaning Expenditure only... commit first
 //now, the next thing is to change the directory structure - now done great!
 	//the update folder contains all v2 files, and also contain 2 makefiles to generate two separate exe for creditExpense or just expenditure-- commit
+//next clean up the codes for v2....
 
-
+//next, ensure that the original set in src still works with the updated ui... also do some appearance mods...
+	//again this is done, unfortunately, there was a needed edit to ui.cpp which must be done manually...
+	//commit this as Rev2.1
 
 	
 /////////////////////////////////////

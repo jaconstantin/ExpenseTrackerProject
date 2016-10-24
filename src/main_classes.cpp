@@ -39,7 +39,7 @@ struct tm extern *g_now;
 //print with format PhpXXXX.XX
 void PhPeso::printPhp(){
     cout << currency;
-	cout << std::fixed << std::setprecision(2) << value << endl;
+	cout << std::fixed << std::setprecision(2) << std::setfill(' ') << std::setw(10) << value; //<< endl;
 }
 
 //convenience function
@@ -66,8 +66,9 @@ Expenditure::Expenditure(const string curr="Php", const float val=0, const strin
 void Expenditure::printExpenditure(){
 	etime.printExpTime();
 	cout << "  ";
-    cout <<'"'<< description << '"' << "\t";
-	price.printPhp(); 
+	price.printPhp(); cout << "    ";
+    cout <<'"' << std::setfill('.') << std::setw(30)<< description << '"';
+	cout << endl;
 }
 
 
@@ -111,8 +112,8 @@ void ExpVector::printVctr(){
 
 
 //export current content of a vector to a csv file 
-void ExpVector::exportVctr(){
-	ofstream fDest("source-file.csv");
+void ExpVector::exportVctr(const char* fName){
+	ofstream fDest(fName);
 	for(int i=0; i<vecexp.size(); ++i){
 		PhPeso tmpPrice = vecexp[i].getPrice();	
 		ExpTime tmpTime = vecexp[i].getTime();
@@ -129,8 +130,8 @@ void ExpVector::exportVctr(){
 
 
 //load CSV contents to active ExpVector
-void ExpVector::loadVctr(){
- 	ifstream fSource("source-file.csv");
+void ExpVector::loadVctr(const char* fName){
+ 	ifstream fSource(fName);
 	
 	if(fSource) //verify if file was opened succesffully
 	{
@@ -200,7 +201,7 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 			if(mode==perEntry) low->printExpenditure();             //print by entry always go to this statement
 			else{
 	 			cout << tmpPrevTime.getDate(mode) << ".........";  //print corresponding date 
-				tmpMoneyTot.printPhp();                            //print accumulated total
+				tmpMoneyTot.printPhp(); cout << endl;              //print accumulated total
 			   	tmpMoneyTot = low->getPrice();                     //reset total count
 			}
 		}
@@ -215,9 +216,9 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 		if(mode!=perEntry){
 			ExpTime tmpPrevTime = tmpPrevExp.getTime();
 			cout << tmpPrevTime.getDate(mode) << ".........";
-			tmpMoneyTot.printPhp();
+			tmpMoneyTot.printPhp(); cout << endl;
 		}
-		cout << "total expenditure for the said range = ";
+		cout << endl << "total expenditure for the said range = ";
 		tmpMoneyTot2.printPhp();
 		cout << endl << "done printing entries..." << endl << endl;	
 	}

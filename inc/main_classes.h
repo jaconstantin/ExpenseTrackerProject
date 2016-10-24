@@ -84,8 +84,8 @@ public:
     //print entries within specified range of date; mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
     void printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode);  
     
-    void exportVctr(); //export current content of a vector to a csv file 
-    void loadVctr();   //load content of csv to database
+    void exportVctr(const char* fName); //export current content of a vector to a csv file 
+    void loadVctr(const char* fName);   //load content of csv to database
 	
 
 	
