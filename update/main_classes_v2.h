@@ -1,7 +1,8 @@
 //---------------------------------------------------------------------
-//----main_classes.h
+//----main_classes_v2.h
 //----Author: Jconstan
-//-----contains the main class methods of Expenditure
+//-----extended main_classes.h to be able to support both Cash and 
+//-----Credit card expenses
 //----------------------------------------------------------------------
 
 
@@ -114,25 +115,20 @@ public:
 	void addEntry(const string date, const string time, const string wday, const string curr, 				   
 		const float val, const string dc, const float cpay, const float cbalance);                          //for CreditExpenditure, include time info
 	
-
+	
     ExpVector(){} 													                   //calls default constructor, empty vector
     void addEntry(const string curr, const float, const string dc);                    //real time user input for Expenditure, auto get date
 	void addEntry(const string curr, const float, const string dc, const float cpay);  //real time user input for CreditExpenditure
 	void dropEntry();                       					                       //delete last entry
+ 
+    void printVctr();                     //print all entries
     
-	//PhPeso addTot();												  //add all expense 
-	//void printSize(){ cout << vecexp.size() << endl; }
-    void printVctr();    										      //print all entries
-    
-	
     //print entries within specified range of date; mode0 per day, 1 per month, 2 per year, 3 per entry   //note here, can't make this const function due to iterator
     void printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode);  
     
-    void exportVctr(const char* fName);       //export current content of a vector to csv fName 
-    void loadVctr(const char* fName);         //load content of csv to vector, function depends on file name
+    void exportVctr(const char* fName);   //export current content of a vector to csv fName 
+    void loadVctr(const char* fName);     //load content of csv to vector, function depends on file name
 	
-
-
 };
    
    

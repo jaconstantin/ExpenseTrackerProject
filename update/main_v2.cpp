@@ -1,3 +1,10 @@
+//---------------------------------------------------------------------
+//----main_v2.cpp
+//----Author: Jconstan
+//-----change only include header file to point to main_classes_v2.h
+//----------------------------------------------------------------------
+
+
 #include <iostream>
 #include <cstdlib>
 #include <fstream>

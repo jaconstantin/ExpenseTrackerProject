@@ -1,7 +1,8 @@
 //---------------------------------------------------------------------
-//----main_classes.cpp
+//----main_classes_v2.cpp
 //----Author: Jconstan
-//-----contains the main class methods of Expenditure
+//-----extended main_classes.cpp to be able to support both Cash and 
+//-----Credit card expenses
 //----------------------------------------------------------------------
 
 #include <iostream>
@@ -209,15 +210,6 @@ void ExpVector::addEntry(const string date, const string time, const string wday
 }
 
 
-/*
-PhPeso ExpVector::addTot(){
-    PhPeso tmp;
-    for(int i=vecexp.size(); i>0; --i) tmp = tmp + vecexp[i-1].getPrice();
-    return tmp;
-}
-*/
-
-
 //delete last entry
 void ExpVector::dropEntry(){
 	emptyExcept();	                 //throw exception and abort if vector is empty
@@ -238,6 +230,7 @@ void ExpVector::printVctr(){
 
 
 //export current content of a vector to a csv file, getCsvfunction for Expenditure or CreditExpenditure maybe called
+//getCsv string varies depending if object is Expenditure of CreditExpenditure
 void ExpVector::exportVctr(const char* fName){
 	ofstream fDest(fName);
 	
@@ -291,6 +284,7 @@ void ExpVector::loadVctr(const char* fName){
 
 
 //print entries within specified range of date depending on mode: 0 per day, 1 per month, 2 per year, 3 per entry
+//makes use of virtual functions to call the rigth method depending if object is Expenditure or Credit Expenditure
 void ExpVector::printVctrRange(const string &startDate, const string &endDate, const dateMode_t &mode){
 	
 	emptyExcept();			                                                  //throw exception and abort if vector is empty
@@ -319,12 +313,7 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 	//iterate database until endDate, note low is a pointer to an expenditure pointer...
 	for(low; ((*low)->getTime() <= tmpEndExp->getTime()); ++low){
 		tmpFindFlag = 1; 		                                  //found at least 1 entry
-		
-		//#ifdef test
-		//cout << "moneytot_temp = ";	
-		//tmpMoneyTot.printPhp();
-		//#endif
-	
+			
 		ExpTime tmpCurrTime = (*low)->getTime();
 		ExpTime tmpPrevTime = tmpPrevExp->getTime(); 
 		(*low)->accumulateMoney(tmpMoneyTot2);                    //accumulate grand total

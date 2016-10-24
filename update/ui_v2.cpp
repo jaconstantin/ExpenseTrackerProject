@@ -1,8 +1,9 @@
 //---------------------------------------------------------------------
-//----ui.cpp
+//----ui_v2.cpp
 //----Author: Jconstan
-//-----contains the ui class for the userinterface
-//-----Makes use of CreditExpenditure
+//-----Minor modifications to enable CreditExpenditure instead of just Expenditure
+//-----ChangeLog: Class constructor, source csv files, print labels, and added 
+//-----cashpayment user input to command add entry
 //----------------------------------------------------------------------
 
 
@@ -136,9 +137,7 @@ int UI::launchUI(){
 		
 		tmpUsrIn = getUsrInput();					 //get user input cmd as string, check format, then convert to int
 		userCmd = atoi(tmpUsrIn.c_str()); 
-		
-		//const char* fName = "source-file.csv";
-		
+				
 		switch(userCmd){
 			
 			case 0:   //exit program
@@ -279,7 +278,6 @@ int UI::launchUI(){
 			
 		
 		if(userCmd==0){
-			//expDatabase.exportVctr();
 			break;
 		}
 		
