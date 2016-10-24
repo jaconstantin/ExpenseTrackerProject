@@ -74,7 +74,7 @@ Expenditure::Expenditure(const string curr="Php", const float val=0, const strin
 void Expenditure::printExpenditure(){
 	etime.printExpTime();
 	cout << "  ";
-	price.printPhp(); cout << "\t";
+	price.printPhp(); cout << "    ";
     cout <<'"' << std::setfill('.') << std::setw(30)<< description << '"';
 	//cout << endl;
 }
@@ -132,8 +132,8 @@ CreditExpenditure::CreditExpenditure(const string curr="Php", const float val=0,
 //extend base class print function
 void CreditExpenditure::printExpenditure(){	
 	Expenditure::printExpenditure();
-	cout << "\t"; cashPayment.printPhp(); 
-	cout << "\t"; creditBalance.printPhp(); 
+	cout << "    "; cashPayment.printPhp(); 
+	cout << "    "; creditBalance.printPhp(); 
 }
 
 
@@ -166,9 +166,10 @@ void CreditExpenditure::getMoney(PhPeso money[3]){
 
 //print money related data of array
 void CreditExpenditure::printMoney(PhPeso money[3]){
-	money[0].printPhp(); cout << "\t";
-	money[1].printPhp(); cout << "\t";
-	money[2].printPhp(); cout << "\t";
+	money[0].printPhp(); //cout << "    "; 
+	cout << setfill(' ') << setw(44);
+	money[1].printPhp(); cout << "    "; 
+	money[2].printPhp(); cout << "    ";
 	cout << endl;
 }
 
@@ -337,11 +338,11 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 				cout << endl;
 			} 
 			else{
-	 			cout << tmpPrevTime.getDate(mode) << ".........";    //print corresponding date 
-				//tmpMoneyTot.printPhp(); cout << endl;              //print accumulated total
-			   	//tmpMoneyTot = (*low)->getPrice();                  //reset total count
-				(*low)->printMoney(tmpMoneyTot);
-				(*low)->getMoney(tmpMoneyTot);
+	 			cout << tmpPrevTime.getDate(mode) << "........................";    //print corresponding date 
+				if(mode==perMonth) cout << "...";
+				if(mode==perYear) cout << "......";
+				(*low)->printMoney(tmpMoneyTot);	                //print accumulated total
+				(*low)->getMoney(tmpMoneyTot);		                //reset total count
 			}
 		}
 		tmpPrevExp = *low;
@@ -354,11 +355,14 @@ void ExpVector::printVctrRange(const string &startDate, const string &endDate, c
 		//no need for this statement in mode 'perEntry', since its bool function always return false, hence, always printsexpenditure per entry
 		if(mode!=perEntry){
 			ExpTime tmpPrevTime = tmpPrevExp->getTime();
-			cout << tmpPrevTime.getDate(mode) << ".........";
-			//tmpMoneyTot.printPhp(); cout << endl;
+			cout << tmpPrevTime.getDate(mode) << "........................";
+			if(mode==perMonth) cout << "...";
+			if(mode==perYear) cout << "......";
 			(*low)->printMoney(tmpMoneyTot);
 		}
-		cout << "total expenditure for the said range = ";
+		
+		cout << setfill('-') << setw(120) << "----------------------------------------------\n";
+		cout << endl << "total expenditure for the range = ";
 		(*low)->printMoney(tmpMoneyTot2);
 		cout << endl << "done printing entries..." << endl << endl;	
 	}
