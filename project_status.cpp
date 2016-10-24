@@ -469,7 +469,8 @@
 ////Remaining list
 /////////////////////////
 //make main_v2 compatible with ui.cpp meaning Expenditure only... commit first
-//now, the next thing is to change the directory structure
+//now, the next thing is to change the directory structure - now done great!
+	//the update folder contains all v2 files, and also contain 2 makefiles to generate two separate exe for creditExpense or just expenditure-- commit
 
 
 

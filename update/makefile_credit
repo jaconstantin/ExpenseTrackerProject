@@ -1,0 +1,28 @@
+##------------------------------------------------------------------
+##Author: Jconstan
+##makefile to generate executable 
+##ui_v2, main_class_v2 and main_v2 to launch a tracker for cash and Credit Card Expense
+##uses the original auxillary.cpp from src directory and ui.h from inc directory
+##-------------------------------------------------------------------
+
+INC = ../inc
+SRC = ../src
+OBJS = main_v2.o main_classes_v2.o auxillary.o ui_v2.o
+CC = g++
+CFLAGS = -Wall -c 
+LFLAGS = -Wall
+
+main_credit: $(OBJS)
+	$(CC) $(LFLAGS) $(OBJS) -o main_credit
+
+main_v2.o : main_v2.cpp main_classes_v2.h $(INC)/auxillary.h $(INC)/ui.h
+	$(CC) -I$(INC) $(CFLAGS) main_v2.cpp
+
+ui_v2.o : ui_v2.cpp $(INC)/ui.h main_classes_v2.h $(INC)/auxillary.h
+	$(CC) -I$(INC) $(CFLAGS) ui_v2.cpp
+
+main_classes_v2.o : main_classes_v2.cpp main_classes_v2.h $(INC)/auxillary.h
+	$(CC) -I$(INC) $(CFLAGS) main_classes_v2.cpp
+
+auxillary.o : $(SRC)/auxillary.cpp $(INC)/auxillary.h
+	$(CC) -I$(INC) $(CFLAGS) $(SRC)/auxillary.cpp
