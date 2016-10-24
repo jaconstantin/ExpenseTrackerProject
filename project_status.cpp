@@ -465,6 +465,12 @@
 //very minimal change in terms of functionality
 //done commit this please!!
 
+//////////////////////////
+////Remaining list
+/////////////////////////
+//make main_v2 compatible with ui.cpp meaning Expenditure only... commit first
+//now, the next thing is to change the directory structure
+
 
 
 	

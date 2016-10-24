@@ -9,6 +9,7 @@
 #include <vector>
 #include <algorithm>
 #include <cctype>
+#include <iomanip>
 
 
 //note here, to avoid the conflict in compiling when including the same header file
@@ -151,8 +152,13 @@ int UI::launchUI(){
 				cout << "***now printing all entries**" << endl;
 				cout << "*****************************" << endl;
 				printLines(2);
-				cout << "date \t wkday \t time \t description \t price\n";
-				cout << "----------------------------------------------\n";
+					
+				cout << setfill(' ') << setw(7) << "date"
+				     << setfill(' ') << setw(13) << "wkday" 
+				     << setfill(' ') << setw(9) << "time" 
+					 << setfill(' ') << setw(15) << "price"
+					 << setfill(' ') << setw(30) << "description\n"; 	
+				cout << setfill('-') << setw(120) << "----------------------------------------------\n";
 				printLines(2);
 				
 				//detect if vector is empty before print all
@@ -188,13 +194,25 @@ int UI::launchUI(){
 				printLines(2);
 				
 				switch(tmpDateMode){
-					case perDay: cout << "date \t price\n"; break;
-					case perMonth: cout << "month \t price\n"; break;
-					case perYear: cout << "year \t price\n"; break;
-					default: cout << "date \t wkday \t time \t description \t price\n"; break;
+					case perDay: 
+						cout << "    date" << setfill(' ') << setw(37) << "price\n" ;
+						break;
+					case perMonth: 
+						cout << "    month" << setfill(' ') << setw(37) << "price\n" ;
+						break;
+					case perYear: 
+						cout << "    year" << setfill(' ') << setw(37) << "price\n" ;
+						break;
+					default: 
+						cout << setfill(' ') << setw(7) << "date"
+							<< setfill(' ') << setw(13) << "wkday" 
+							<< setfill(' ') << setw(9) << "time" 
+							<< setfill(' ') << setw(15) << "price"
+							<< setfill(' ') << setw(30) << "description\n"; 	
+						break;
 				}
 				
-				cout << "----------------------------------------------\n";
+				cout << setfill('-') << setw(120) << "----------------------------------------------\n";
 				printLines(2);
 				
 				//detect if vector is empty, then print data per dateMode_t(day,month,year,entry) within date range
