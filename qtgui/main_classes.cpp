@@ -3,7 +3,7 @@
 //----Author: Jconstan
 //-----contains the main class methods of Expenditure
 //-----version for Qt, need added functions for output display
-//-----also modify printVctr range
+//-----------printVctrRange was modified to output to Qt Widgets
 //----------------------------------------------------------------------
 
 #include <iostream>
@@ -56,6 +56,7 @@ PhPeso PhPeso::operator+(const PhPeso o){
     return tmpMoney;
 }
 
+//print Money to a string
 string PhPeso::getPhp(){
 	
 	stringstream tempStream;
@@ -122,14 +123,6 @@ void ExpVector::addEntry(const string date, const string time, const string wday
 	Expenditure tmp(date, time, wday, curr, val, dc);
 	vecexp.push_back(tmp);
 }
-
-/*
-PhPeso ExpVector::addTot(){
-    PhPeso tmp;
-    for(int i=vecexp.size(); i>0; --i) tmp = tmp + vecexp[i-1].getPrice();
-    return tmp;
-}
-*/
 
 
 //delete last entry

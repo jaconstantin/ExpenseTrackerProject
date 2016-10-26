@@ -3,6 +3,11 @@
 
 #include <QMainWindow>
 
+#ifndef __MAIN_CLASSES
+#include "main_classes.h"
+#define __MAIN_CLASSES
+#endif
+
 namespace Ui {
 class MainWindow;
 }
@@ -14,6 +19,9 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+
+    //container class for the database
+    ExpVector Ev1;
 
 private slots:
     void on_addEntryButton_clicked();

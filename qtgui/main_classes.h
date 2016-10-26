@@ -3,7 +3,7 @@
 //----Author: Jconstan
 //-----contains the main class methods of Expenditure
 //-----version for Qt, need added functions for output display
-//-----also modify printVctr range
+//-----------printVctrRange was modified to output to Qt Widgets
 //----------------------------------------------------------------------
 
 #include <iostream>
