@@ -1,0 +1,16 @@
+<RCC>
+    <qresource prefix="/new/prefix1">
+        <file>Picture1.png</file>
+        <file>blackSilverbackground.jpg</file>
+        <file>xmenBackground.jpg</file>
+        <file>Currency.png</file>
+        <file>Description.png</file>
+        <file>Value.png</file>
+        <file>JC.png</file>
+        <file>PENSE.png</file>
+        <file>endDate.png</file>
+        <file>startDate.png</file>
+        <file>viewMode.png</file>
+    </qresource>
+    <qresource prefix="/new/prefix2"/>
+</RCC>
